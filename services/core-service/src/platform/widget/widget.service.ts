@@ -29,7 +29,7 @@ export class WidgetService {
       ).shift()
 
       const goalPercentage =
-        ((assetData ?? 0) * 100) / (goalData ? goalData[0]?.goalAmount : 0) || 0
+        ((assetData ?? 0) * 100) / (goalData ? goalData?.goalAmount : 0) || 0
 
       const widgets = [
         {
@@ -48,7 +48,7 @@ export class WidgetService {
           icon: "GoalIcon",
           title: "Goal Progress",
           value: formatCurrency(
-            Number(goalData ? goalData[0]?.goalAmount : 0),
+            Number(goalData ? goalData?.goalAmount : 0),
             user.baseCurrency
           ),
           additionalInfo: `${goalPercentage >= 100 ? 100 : goalPercentage.toFixed(0)}% Complete`,
