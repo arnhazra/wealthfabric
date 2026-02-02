@@ -6,8 +6,6 @@ import { User, UserSchema } from "./schemas/user.schema"
 import { GeneralDbConnectionMap } from "@/shared/entity/entity-db-connection.map"
 import { CqrsModule } from "@nestjs/cqrs"
 import { CreateUserCommandHandler } from "./commands/handler/create-user.handler"
-import { FindUserByEmailQueryHandler } from "./queries/handler/find-user-by-email.handler"
-import { FindUserByIdQueryHandler } from "./queries/handler/find-user-by-id.handler"
 import { UpdateAttributeCommandHandler } from "./commands/handler/update-attribute.handler"
 import { EntityModule } from "@/shared/entity/entity.module"
 import { HttpModule } from "@nestjs/axios"
@@ -40,8 +38,6 @@ import { config } from "@/config"
     TokenRepository,
     CreateUserCommandHandler,
     UpdateAttributeCommandHandler,
-    FindUserByEmailQueryHandler,
-    FindUserByIdQueryHandler,
     SetTokenCommandHandler,
     GetTokensQueryHandler,
     DeleteTokenCommandHandler,
