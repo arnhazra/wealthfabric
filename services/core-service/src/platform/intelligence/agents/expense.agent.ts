@@ -4,7 +4,7 @@ import { tool } from "langchain"
 import { Injectable } from "@nestjs/common"
 import { EventEmitter2 } from "@nestjs/event-emitter"
 import { z } from "zod"
-import { Expense } from "@/apps/expensetrack/expense/schemas/expense.schema"
+import { Expense } from "@/apps/expensetrack/schemas/expense.schema"
 
 @Injectable()
 export class ExpenseAgent {

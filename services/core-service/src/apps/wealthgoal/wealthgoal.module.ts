@@ -1,5 +1,5 @@
 import { Module } from "@nestjs/common"
-import { GoalModule } from "./goal/goal.module"
+import { GoalModule } from "./goal.module"
 import { EntityModule } from "@/shared/entity/entity.module"
 import { config } from "@/config"
 import { AppsDbConnectionMap } from "@/shared/entity/entity-db-connection.map"

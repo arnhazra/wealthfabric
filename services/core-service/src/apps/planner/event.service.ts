@@ -9,17 +9,14 @@ import { FindEventsByUserQuery } from "./queries/impl/find-event-by-user.query"
 import { EventEmitter2 } from "@nestjs/event-emitter"
 import { AppEventMap } from "@/shared/constants/app-events.map"
 import { Asset } from "@/apps/wealthanalyzer/asset/schemas/asset.schema"
-import { Goal } from "@/apps/wealthgoal/goal/schemas/goal.schema"
-import { Debt } from "@/apps/debttrack/debt/schemas/debt.schema"
+import { Goal } from "@/apps/wealthgoal/schemas/goal.schema"
+import { Debt } from "@/apps/debttrack/schemas/debt.schema"
 import { Cashflow } from "@/apps/cashflow/schemas/cashflow.schema"
-import { Expense } from "@/apps/expensetrack/expense/schemas/expense.schema"
+import { Expense } from "@/apps/expensetrack/schemas/expense.schema"
 import { User } from "@/auth/schemas/user.schema"
 import { formatCurrency } from "@/platform/widget/lib/format-currency"
 import { RedisService } from "@/shared/redis/redis.service"
-import {
-  ExpenseCategory,
-  ExpenseCategoryConfig,
-} from "@/shared/constants/types"
+import { ExpenseCategoryConfig } from "@/shared/constants/types"
 
 @Injectable()
 export class EventService {
