@@ -14,7 +14,6 @@ import { GetTokensQueryHandler } from "./queries/handler/get-tokens.handler"
 import { DeleteTokenCommandHandler } from "./commands/handler/delete-token.handler"
 import { Token, TokenSchema } from "./schemas/token.schema"
 import { TokenRepository } from "./repositories/token.repository"
-
 import { config } from "@/config"
 import { FindUserByEmailQueryHandler } from "./queries/handler/find-user-by-email.handler"
 import { FindUserByIdQueryHandler } from "./queries/handler/find-user-by-id.handler"

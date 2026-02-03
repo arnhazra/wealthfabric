@@ -31,7 +31,7 @@ export class AuthService {
     private readonly httpService: HttpService
   ) {}
 
-  async userRegistrationOrLogin(email: string, name?: string) {
+  async userRegistrationOrLogin(email: string, name: string) {
     try {
       const user = await this.queryBus.execute<FindUserByEmailQuery, User>(
         new FindUserByEmailQuery(email)
