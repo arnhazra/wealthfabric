@@ -8,6 +8,7 @@ import {
   Param,
   Body,
   BadRequestException,
+  Query,
 } from "@nestjs/common"
 import { EventService } from "./event.service"
 import { statusMessages } from "@/shared/constants/status-messages"
@@ -34,10 +35,10 @@ export class EventController {
   }
 
   @UseGuards(AuthGuard)
-  @Get("/:selectedMonth")
+  @Get()
   async findMyEventsByMonth(
     @Request() request: ModRequest,
-    @Param("selectedMonth") selectedMonth: string
+    @Query("month") selectedMonth: string
   ) {
     try {
       return await this.service.findMyEventsByMonth(

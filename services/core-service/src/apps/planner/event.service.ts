@@ -92,6 +92,7 @@ export class EventService {
       const goals: Goal[] = (
         await this.eventEmitter.emitAsync(AppEventMap.GetGoalList, userId)
       ).shift()
+
       const goalEvents = goals.map((goal) => ({
         eventDate: goal.goalDate,
         eventName: `Goal of ${formatCurrency(goal.goalAmount, user.baseCurrency)}`,

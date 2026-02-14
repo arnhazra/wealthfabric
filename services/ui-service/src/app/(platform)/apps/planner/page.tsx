@@ -21,6 +21,7 @@ import { endPoints } from "@/shared/constants/api-endpoints"
 import HTTPMethods from "@/shared/constants/http-methods"
 import { EventModal } from "@/shared/components/event-modal"
 import Link from "next/link"
+import { buildQueryUrl } from "@/shared/lib/build-url"
 
 export default function CalendarPage() {
   const [currentDate, setCurrentDate] = useState(new Date())
@@ -37,7 +38,9 @@ export default function CalendarPage() {
 
   const events = useQuery<PlannerEvent[]>({
     queryKey: ["planner-events", selectedMonth],
-    queryUrl: `${endPoints.events}/${selectedMonth}`,
+    queryUrl: buildQueryUrl(endPoints.events, {
+      month: selectedMonth,
+    }),
     method: HTTPMethods.GET,
   })
 
