@@ -25,14 +25,14 @@ import { Goal } from "@/shared/constants/types"
 import HTTPMethods from "@/shared/constants/http-methods"
 import { formatDate } from "@/shared/lib/format-date"
 import api from "@/shared/lib/ky-api"
-import { normalizeToUTCNoon } from "@/shared/lib/utc-normalize"
+import { formatDateString } from "@/shared/lib/format-date-string"
 import { useSearchParams } from "next/navigation"
 import { useRouter } from "nextjs-toploader/app"
 import IconContainer from "@/shared/components/icon-container"
 import Show from "@/shared/components/show"
 
 interface GoalFormData {
-  goalDate?: Date
+  goalDate?: string
   goalAmount?: number
 }
 
@@ -72,7 +72,10 @@ export default function Page() {
     type: "success",
   })
 
-  const handleInputChange = (field: keyof GoalFormData, value: any) => {
+  const handleInputChange = <K extends keyof GoalFormData>(
+    field: K,
+    value: GoalFormData[K]
+  ) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
@@ -157,10 +160,10 @@ export default function Page() {
                       captionLayout="dropdown"
                       startMonth={new Date()}
                       endMonth={new Date(2100, 0)}
-                      selected={formData.goalDate}
+                      selected={new Date(formData.goalDate ?? "")}
                       disabled={(date) => date < new Date()}
                       onSelect={(date) =>
-                        handleInputChange("goalDate", normalizeToUTCNoon(date))
+                        handleInputChange("goalDate", formatDateString(date))
                       }
                       showOutsideDays={false}
                       className="bg-background text-neutral-100"

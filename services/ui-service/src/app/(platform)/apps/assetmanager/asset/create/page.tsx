@@ -32,14 +32,15 @@ import HTTPMethods from "@/shared/constants/http-methods"
 import { formatDate } from "@/shared/lib/format-date"
 import api from "@/shared/lib/ky-api"
 import IconContainer from "@/shared/components/icon-container"
+import { formatDateString } from "@/shared/lib/format-date-string"
 
 interface AssetFormData {
   spaceId: string
   assetType: AssetType | ""
   assetName: string
   identifier: string
-  startDate?: Date
-  maturityDate?: Date
+  startDate?: string
+  maturityDate?: string
   amountInvested?: number
   expectedReturnRate?: number
   contributionAmount?: number
@@ -91,7 +92,10 @@ export default function Page() {
     method: HTTPMethods.GET,
   })
 
-  const handleInputChange = (field: keyof AssetFormData, value: any) => {
+  const handleInputChange = <K extends keyof AssetFormData>(
+    field: K,
+    value: AssetFormData[K]
+  ) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
@@ -208,7 +212,10 @@ export default function Page() {
                 <Select
                   value={formData.assetType}
                   onValueChange={(value) =>
-                    handleInputChange("assetType", value)
+                    handleInputChange(
+                      "assetType",
+                      value as unknown as AssetType
+                    )
                   }
                   required
                 >
@@ -283,13 +290,16 @@ export default function Page() {
                         <PopoverContent className="w-auto p-0 bg-background border-neutral-700 rounded-lg">
                           <Calendar
                             mode="single"
-                            selected={formData.startDate}
+                            selected={new Date(formData.startDate ?? "")}
                             captionLayout="dropdown"
                             startMonth={new Date(2000, 0)}
                             endMonth={new Date()}
                             disabled={(date) => date > new Date()}
                             onSelect={(date) =>
-                              handleInputChange("startDate", date)
+                              handleInputChange(
+                                "startDate",
+                                formatDateString(date)
+                              )
                             }
                             className="bg-background text-neutral-100 rounded-lg border-neutral-700"
                           />
@@ -313,7 +323,7 @@ export default function Page() {
                         <PopoverContent className="w-auto p-0 bg-background border-neutral-700 rounded-lg">
                           <Calendar
                             mode="single"
-                            selected={formData.maturityDate}
+                            selected={new Date(formData.maturityDate ?? "")}
                             captionLayout={
                               formData.startDate ? "dropdown" : "label"
                             }
@@ -321,11 +331,14 @@ export default function Page() {
                             endMonth={new Date(2100, 0)}
                             disabled={(date) =>
                               formData.startDate
-                                ? date < formData.startDate
+                                ? date < new Date(formData.startDate)
                                 : false
                             }
                             onSelect={(date) =>
-                              handleInputChange("maturityDate", date)
+                              handleInputChange(
+                                "maturityDate",
+                                formatDateString(date)
+                              )
                             }
                             className="bg-background text-neutral-100 rounded-lg border-neutral-700"
                           />
@@ -433,7 +446,10 @@ export default function Page() {
                       <Select
                         value={formData.contributionFrequency || ""}
                         onValueChange={(value) =>
-                          handleInputChange("contributionFrequency", value)
+                          handleInputChange(
+                            "contributionFrequency",
+                            value as unknown as RecurringFrequency
+                          )
                         }
                       >
                         <SelectTrigger className="w-full bg-background text-white border-border">

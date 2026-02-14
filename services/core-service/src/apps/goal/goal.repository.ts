@@ -6,7 +6,6 @@ import {
   EntityRepository,
   InjectEntityModel,
 } from "@/shared/entity/entity.repository"
-import { createOrConvertObjectId } from "@/shared/entity/entity.schema"
 
 @Injectable()
 export class GoalRepository extends EntityRepository<Goal> {
@@ -15,17 +14,5 @@ export class GoalRepository extends EntityRepository<Goal> {
     private goalModel: EntityModel<Goal>
   ) {
     super(goalModel)
-  }
-
-  async findNearestGoal(userId: string) {
-    const today = new Date()
-
-    return await this.goalModel
-      .findOne({
-        userId: createOrConvertObjectId(userId),
-        goalDate: today, // change
-      })
-      .sort({ goalDate: 1 })
-      .exec()
   }
 }

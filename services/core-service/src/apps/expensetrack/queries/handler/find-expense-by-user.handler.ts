@@ -35,9 +35,10 @@ export class FindExpensesByUserQueryHandler implements IQueryHandler<FindExpense
 
     const selectedMonth = monthFilter ?? getCurrentMonthString()
     const [year, month] = selectedMonth.split("-").map(Number)
-    const start = new Date(year, month - 1, 1)
-    const end = new Date(year, month, 1)
-    matchStage.expenseDate = { $gte: start, $lt: end }
+    const startStr = `${year}-${String(month).padStart(2, "0")}-01`
+    const endDate = new Date(year, month, 1)
+    const endStr = `${endDate.getFullYear()}-${String(endDate.getMonth() + 1).padStart(2, "0")}-01`
+    matchStage.expenseDate = { $gte: startStr, $lt: endStr }
 
     const result = await this.repository.aggregate([
       { $match: matchStage },

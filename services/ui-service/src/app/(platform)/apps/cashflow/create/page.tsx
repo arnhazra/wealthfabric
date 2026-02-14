@@ -32,7 +32,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select"
-import { normalizeToUTCNoon } from "@/shared/lib/utc-normalize"
+import { formatDateString } from "@/shared/lib/format-date-string"
 import IconContainer from "@/shared/components/icon-container"
 
 interface CashflowFormData {
@@ -41,7 +41,7 @@ interface CashflowFormData {
   flowDirection?: FlowDirection
   amount?: number
   frequency?: FlowFrequency
-  nextExecutionAt?: Date
+  nextExecutionAt?: string
 }
 
 type MessageType = "success" | "error"
@@ -61,7 +61,10 @@ export default function Page() {
     suspense: false,
   })
 
-  const handleInputChange = (field: keyof CashflowFormData, value: any) => {
+  const handleInputChange = <K extends keyof CashflowFormData>(
+    field: K,
+    value: CashflowFormData[K]
+  ) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
@@ -236,12 +239,12 @@ export default function Page() {
                       captionLayout="dropdown"
                       startMonth={new Date()}
                       endMonth={new Date(2100, 0)}
-                      selected={formData.nextExecutionAt}
+                      selected={new Date(formData.nextExecutionAt ?? "")}
                       disabled={(date) => date < new Date()}
                       onSelect={(date) =>
                         handleInputChange(
                           "nextExecutionAt",
-                          normalizeToUTCNoon(date)
+                          formatDateString(date)
                         )
                       }
                       showOutsideDays={false}
