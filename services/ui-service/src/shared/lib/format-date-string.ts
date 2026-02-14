@@ -6,7 +6,6 @@ export function formatDateString(dateString?: string | number | Date) {
       return format(new Date(), "yyyy-MM-dd")
     }
 
-    console.log(format(dateString, "yyyy-MM-dd"))
     return format(dateString, "yyyy-MM-dd")
   } catch (error) {
     return format(new Date(), "yyyy-MM-dd")
