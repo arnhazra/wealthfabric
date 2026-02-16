@@ -2,6 +2,8 @@
 
 ## Version 3.6.1
 
+- Implemented Google OAuth with PKCE flow and deprecated old flow
+
 ## Version 3.6.0
 
 - Code refactoring & optimization
