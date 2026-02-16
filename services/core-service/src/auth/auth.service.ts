@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common"
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from "@nestjs/common"
 import { config } from "src/config"
 import { statusMessages } from "@/shared/constants/status-messages"
 import { OnEvent } from "@nestjs/event-emitter"
@@ -86,7 +90,7 @@ export class AuthService {
       )
 
       if (!tokens.id_token)
-        throw new UnauthorizedException("No ID token received")
+        throw new BadRequestException("No ID token received")
 
       const ticket = await this.googleOAuthClient.verifyIdToken({
         idToken: tokens.id_token,
@@ -96,7 +100,7 @@ export class AuthService {
       const payload = ticket.getPayload()
 
       if (!payload?.email_verified || !payload?.email) {
-        throw new UnauthorizedException("Email not verified")
+        throw new BadRequestException("Email not verified")
       }
 
       const resp = await this.userRegistrationOrLogin(
@@ -112,7 +116,7 @@ export class AuthService {
 
       return resp
     } catch (error) {
-      throw new UnauthorizedException("Google authentication failed")
+      throw new BadRequestException("Google authentication failed")
     }
   }
 
