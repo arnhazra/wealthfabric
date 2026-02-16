@@ -2,7 +2,8 @@
 
 ## Version 3.6.1
 
-- Implemented Google OAuth with PKCE flow and deprecated old flow
+- Implemented Google OAuth with PKCE flow and deprecated legacy flow
+- Migrated from GPT OSS to GPT 4o for better reasoning
 
 ## Version 3.6.0
 
