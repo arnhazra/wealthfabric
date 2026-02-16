@@ -1,5 +1,7 @@
 # Changelog
 
+## Version 3.6.1
+
 ## Version 3.6.0
 
 - Code refactoring & optimization
