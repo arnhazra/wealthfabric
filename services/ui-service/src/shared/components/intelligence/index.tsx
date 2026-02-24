@@ -9,7 +9,7 @@ import {
   User,
   ArrowUp,
   Sparkles,
-  ExternalLink,
+  BadgeMinus,
 } from "lucide-react"
 import { endPoints } from "@/shared/constants/api-endpoints"
 import { platformName, uiConstants } from "@/shared/constants/global-constants"
@@ -20,49 +20,79 @@ import { Badge } from "../ui/badge"
 import { Thread } from "@/shared/constants/types"
 import IconContainer from "../icon-container"
 import { streamResponseText } from "@/shared/lib/stream-response"
-import { useRouter } from "nextjs-toploader/app"
 import { useUserContext } from "@/context/user.provider"
-import { usePathname } from "next/navigation"
 import api from "@/shared/lib/ky-api"
+import { eventEmitter } from "@/shared/event-emitter/event-emitter"
+import { EventMap } from "@/shared/event-emitter/events-map"
+import { EntityType } from "../entity-card/data"
+import useQuery from "@/shared/hooks/use-query"
+import HTTPMethods from "@/shared/constants/http-methods"
 
 export default function Intelligence() {
   const [isOpen, setIsOpen] = useState(false)
-  const [threadId, setThreadId] = useState<string | null>(null)
   const [{ user }] = useUserContext()
   const [prompt, setPrompt] = useState("")
   const [isLoading, setLoading] = useState(false)
   const [messages, setMessages] = useState<string[]>([])
   const messagesEndRef = useRef<HTMLDivElement>(null)
-  const router = useRouter()
-  const pathName = usePathname()
+  const threadId = sessionStorage.getItem("thread_id")
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }
+  const thread = useQuery<Thread[]>({
+    queryKey: ["get-thread", threadId ?? ""],
+    queryUrl: `${endPoints.intelligence}/thread/${threadId}`,
+    method: HTTPMethods.GET,
+    suspense: false,
+    enabled: threadId !== null,
+  })
 
   useEffect(() => {
-    scrollToBottom()
+    setMessages(
+      thread.data?.flatMap(({ prompt, response }) => [
+        prompt ?? "",
+        response ?? "",
+      ]) ?? []
+    )
+  }, [thread?.data])
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages])
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPrompt(e.target.value)
-  }
+  useEffect(() => {
+    eventEmitter.on(EventMap.Summarize, (data) => {
+      const { entityType, entityDetails, entityName } = data || {}
+      const summarizePrompt = `Summarize the ${entityName} ${entityType} and give me insights.`
+      setIsOpen(true)
+      invokeChatAPI(summarizePrompt, true, entityType, entityDetails)
+    })
+  }, [])
 
-  const hitAPI = async (e: any) => {
-    e.preventDefault()
-    setMessages((prev) => [...prev, prompt])
+  const invokeChatAPI = async (
+    userPrompt: string,
+    summarizeRequest: boolean,
+    entityType?: EntityType,
+    entityDetails?: string
+  ) => {
+    const latestThreadId = sessionStorage.getItem("thread_id")
+    setMessages((prev) => [...prev, userPrompt ?? ""])
     setPrompt("")
     setLoading(true)
 
     try {
       const res: Thread = await api
         .post(`${endPoints.intelligence}/chat`, {
-          json: { prompt, threadId: threadId ?? undefined },
+          json: {
+            prompt: userPrompt,
+            threadId: latestThreadId ?? undefined,
+            summarizeRequest,
+            entityType,
+            entityDetails,
+          },
         })
         .json()
 
-      if (!threadId) {
-        setThreadId(res.threadId)
+      if (!latestThreadId) {
+        sessionStorage.setItem("thread_id", res.threadId)
       }
 
       setMessages((prevMessages) => [...prevMessages, ""])
@@ -81,8 +111,13 @@ export default function Intelligence() {
     }
   }
 
+  const clearChat = () => {
+    setMessages([])
+    sessionStorage.removeItem("thread_id")
+  }
+
   return (
-    <Show condition={user.useIntelligence && !pathName.match("intelligence")}>
+    <Show condition={user.useIntelligence}>
       <Button
         onClick={() => setIsOpen(true)}
         variant="default"
@@ -135,8 +170,9 @@ export default function Intelligence() {
                   <Badge
                     key={index}
                     className="text-neutral-300 bg-neutral-800 hover:bg-neutral-700 p-1 ps-4 pe-4 ms-2 mb-2 cursor-pointer"
-                    onClick={(e): void => {
+                    onClick={(): void => {
                       setPrompt(item)
+                      invokeChatAPI(item, false)
                     }}
                   >
                     {item}
@@ -217,23 +253,21 @@ export default function Intelligence() {
         <div className="p-4 border-none">
           <div className="text-center">
             <Button
-              variant="ghost"
+              variant="outline"
               size="sm"
-              onClick={() => {
-                setIsOpen(false)
-                if (threadId) {
-                  router.push(`/intelligence?threadId=${threadId}`)
-                } else {
-                  router.push(`/intelligence`)
-                }
-              }}
+              onClick={clearChat}
               className="text-xs text-neutral-400 hover:text-white bg-transparent hover:bg-transparent mb-2"
             >
-              <ExternalLink className="h-3 w-3 mr-1" />
-              Open in Full Screen
+              <BadgeMinus className="h-3 w-3 mr-1" />
+              Clear Chat
             </Button>
           </div>
-          <form onSubmit={hitAPI}>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault()
+              invokeChatAPI(prompt, false)
+            }}
+          >
             <div className="w-full max-w-4xl mx-auto">
               <div className="relative bg-neutral-900 border border-border rounded-full p-2 ps-4 pe-4 shadow-lg">
                 <div className="flex flex-col gap-3">
@@ -242,7 +276,7 @@ export default function Intelligence() {
                       <Input
                         autoFocus
                         value={prompt}
-                        onChange={handleInputChange}
+                        onChange={(e) => setPrompt(e.target.value)}
                         placeholder="Ask Anything"
                         disabled={isLoading}
                         className="bg-transparent border-none text-neutral-300 placeholder:text-neutral-500 focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none outline-none ring-0 text-sm px-0"
