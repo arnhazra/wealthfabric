@@ -3,9 +3,9 @@ import { ReactNode, createContext, useContext, useReducer } from "react"
 import { UserState, Actions, ActionsMap, UserReducer } from "./user.reducer"
 import { Currency } from "country-code-enum"
 
-export type Dispatcher = <Type extends keyof ActionsMap>(
-  type: Type,
-  payload: ActionsMap[Type]
+export type Dispatcher = <K extends keyof ActionsMap>(
+  type: K,
+  payload: ActionsMap[K]
 ) => void
 
 type UserContextInterface = readonly [UserState, Dispatcher]

@@ -6,7 +6,7 @@ import { endPoints } from "@/shared/constants/api-endpoints"
 import { platformName, uiConstants } from "@/shared/constants/global-constants"
 import { useUserContext } from "@/context/user.provider"
 import {
-  User,
+  UserIcon,
   AtSign,
   CircleArrowRight,
   Globe,
@@ -28,6 +28,7 @@ import {
 import Cookies from "js-cookie"
 import { useConfirmContext } from "@/shared/providers/confirm.provider"
 import api from "@/shared/lib/ky-api"
+import type { User } from "@/shared/constants/types"
 
 export default function Page() {
   const [{ user }, dispatch] = useUserContext()
@@ -68,41 +69,16 @@ export default function Page() {
     }
   }
 
-  const saveSustainabilitySettings = async (updatedSettings: boolean) => {
+  const updateAttribute = async <K extends keyof User>(
+    attributeName: K,
+    attributeValue: boolean
+  ) => {
     try {
-      dispatch("setUser", { reduceCarbonEmissions: updatedSettings })
+      dispatch("setUser", { [attributeName]: attributeValue })
       await api.patch(endPoints.updateAttribute, {
         json: {
-          attributeName: "reduceCarbonEmissions",
-          attributeValue: updatedSettings,
-        },
-      })
-    } catch (error) {
-      notify(uiConstants.genericError, "error")
-    }
-  }
-
-  const saveAnalyticsSettings = async (updatedSettings: boolean) => {
-    try {
-      dispatch("setUser", { analyticsData: updatedSettings })
-      await api.patch(endPoints.updateAttribute, {
-        json: {
-          attributeName: "analyticsData",
-          attributeValue: updatedSettings,
-        },
-      })
-    } catch (error) {
-      notify(uiConstants.genericError, "error")
-    }
-  }
-
-  const saveIntelligenceUsage = async (updatedSettings: boolean) => {
-    try {
-      dispatch("setUser", { useIntelligence: updatedSettings })
-      await api.patch(endPoints.updateAttribute, {
-        json: {
-          attributeName: "useIntelligence",
-          attributeValue: updatedSettings,
+          attributeName,
+          attributeValue,
         },
       })
     } catch (error) {
@@ -113,18 +89,13 @@ export default function Page() {
   const viewAIDataAgreement = async (from: string) => {
     const consent = await confirm({
       title: `${platformName} Intelligence Data Agreement`,
-      desc: `By enabling ${platformName} Intelligence, you agree to allow ${platformName} the system to process certain data to provide AI-powered 
-      enhancements. We want to be completely clear about what that means, what is and isn’t shared, and how your information is handled.
-      When you use AI features, the app may send text or structured data to a language model so it can analyze, summarize, 
-      or generate helpful responses. This processing happens securely and is designed to improve your experience for example, 
-      by offering insights, suggestions, or automated assistance. The data you provide is used only for producing those responses 
-      and related functionality. It is not used to build public datasets or to train unrelated models.`,
+      desc: uiConstants.useIntelligenceStatement,
     })
 
     if (from === "switch" && !consent) {
-      saveIntelligenceUsage(false)
+      updateAttribute("useIntelligence", false)
     } else {
-      saveIntelligenceUsage(true)
+      updateAttribute("useIntelligence", true)
     }
   }
 
@@ -137,7 +108,7 @@ export default function Page() {
             <Avatar className="h-8 w-8 cursor-pointer">
               <AvatarImage src={user.avatar ?? ""} alt={user.name} />
               <AvatarFallback className="bg-neutral-800">
-                <User className="h-4 w-4 text-primary" />
+                <UserIcon className="h-4 w-4 text-primary" />
               </AvatarFallback>
             </Avatar>
           }
@@ -200,7 +171,7 @@ export default function Page() {
               checked={user.useIntelligence}
               onCheckedChange={(value) => {
                 if (!value) {
-                  saveIntelligenceUsage(value)
+                  updateAttribute("useIntelligence", value)
                 } else {
                   viewAIDataAgreement("switch")
                 }
@@ -220,7 +191,7 @@ export default function Page() {
             <Switch
               checked={user.analyticsData}
               onCheckedChange={(value): Promise<void> =>
-                saveAnalyticsSettings(value)
+                updateAttribute("analyticsData", value)
               }
             />,
           ]}
@@ -237,7 +208,7 @@ export default function Page() {
             <Switch
               checked={user.reduceCarbonEmissions}
               onCheckedChange={(value): Promise<void> =>
-                saveSustainabilitySettings(value)
+                updateAttribute("reduceCarbonEmissions", value)
               }
             />,
           ]}
