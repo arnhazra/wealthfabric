@@ -32,5 +32,6 @@ import { AssetModule } from "../asset/asset.module"
     FindAllSpaceQueryHandler,
     FindSpaceByIdQueryHandler,
   ],
+  exports: [SpaceRepository],
 })
 export class SpaceModule {}

@@ -33,5 +33,6 @@ import { FindCashflowsByUserQueryHandler } from "./queries/handler/find-cashflow
     FindCashflowsQueryHandler,
     FindCashflowsByUserQueryHandler,
   ],
+  exports: [CashFlowRepository],
 })
 export class CashFlowModule {}

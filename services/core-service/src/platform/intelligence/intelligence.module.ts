@@ -17,6 +17,14 @@ import { AssetAgent } from "./agents/asset.agent"
 import { DebtAgent } from "./agents/debt.agent"
 import { ExpenseAgent } from "./agents/expense.agent"
 import { CashflowAgent } from "./agents/cashflow.agent"
+import { RepoService } from "./repo.service"
+import { SpaceModule } from "@/apps/assetmanager/space/space.module"
+import { AssetModule } from "@/apps/assetmanager/asset/asset.module"
+import { DebtTrackModule } from "@/apps/debttrack/debttrack.module"
+import { GoalManagerModule } from "@/apps/goalmanager/goalmanager.module"
+import { CashFlowModule } from "@/apps/cashflow/cashflow.module"
+import { PlannerModule } from "@/apps/planner/planner.module"
+import { ExpenseTrackModule } from "@/apps/expensetrack/expensetrack.module"
 
 @Module({
   imports: [
@@ -30,6 +38,13 @@ import { CashflowAgent } from "./agents/cashflow.agent"
       [{ name: Thread.name, schema: ThreadSchema }],
       GeneralDbConnectionMap.Platform
     ),
+    SpaceModule,
+    AssetModule,
+    DebtTrackModule,
+    GoalManagerModule,
+    CashFlowModule,
+    PlannerModule,
+    ExpenseTrackModule,
   ],
   controllers: [IntelligenceController],
   providers: [
@@ -44,6 +59,7 @@ import { CashflowAgent } from "./agents/cashflow.agent"
     CashflowAgent,
     CreateThreadCommandHandler,
     FetchThreadByIdQueryHandler,
+    RepoService,
   ],
 })
 export class IntelligenceModule {}

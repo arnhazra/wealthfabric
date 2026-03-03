@@ -35,5 +35,6 @@ import { FindExpensesByUserQueryHandler } from "./queries/handler/find-expense-b
     FindExpensesByUserQueryHandler,
     FindExpenseByIdQueryHandler,
   ],
+  exports: [ExpenseRepository],
 })
 export class ExpenseTrackModule {}

@@ -34,6 +34,6 @@ import { FindAssetsByTypesQueryHandler } from "./queries/handler/find-assets-by-
     FindAssetByIdQueryHandler,
     FindAssetsByTypesQueryHandler,
   ],
-  exports: [AssetService],
+  exports: [AssetService, AssetRepository],
 })
 export class AssetModule {}
