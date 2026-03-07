@@ -9,14 +9,8 @@ import { IntelligenceRepository } from "./intelligence.repository"
 import { EntityModule } from "@/shared/entity/entity.module"
 import { FetchThreadByIdQueryHandler } from "./queries/handler/fetch-thread-by-id.handler"
 import { HttpModule } from "@nestjs/axios"
-import { GoalAgent } from "./agents/goal.agent"
 import { config } from "@/config"
 import { ChatStrategy } from "./strategies/chat.strategy"
-import { SpaceAgent } from "./agents/space.agent"
-import { AssetAgent } from "./agents/asset.agent"
-import { DebtAgent } from "./agents/debt.agent"
-import { ExpenseAgent } from "./agents/expense.agent"
-import { CashflowAgent } from "./agents/cashflow.agent"
 import { SpaceModule } from "@/apps/assetmanager/space/space.module"
 import { AssetModule } from "@/apps/assetmanager/asset/asset.module"
 import { DebtTrackModule } from "@/apps/debttrack/debttrack.module"
@@ -50,12 +44,7 @@ import { ExpenseTrackModule } from "@/apps/expensetrack/expensetrack.module"
     IntelligenceService,
     IntelligenceRepository,
     ChatStrategy,
-    SpaceAgent,
-    AssetAgent,
-    GoalAgent,
-    DebtAgent,
-    ExpenseAgent,
-    CashflowAgent,
+
     CreateThreadCommandHandler,
     FetchThreadByIdQueryHandler,
   ],
