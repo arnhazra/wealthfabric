@@ -17,7 +17,6 @@ import { AssetAgent } from "./agents/asset.agent"
 import { DebtAgent } from "./agents/debt.agent"
 import { ExpenseAgent } from "./agents/expense.agent"
 import { CashflowAgent } from "./agents/cashflow.agent"
-import { RepoService } from "./repo.service"
 import { SpaceModule } from "@/apps/assetmanager/space/space.module"
 import { AssetModule } from "@/apps/assetmanager/asset/asset.module"
 import { DebtTrackModule } from "@/apps/debttrack/debttrack.module"
@@ -59,7 +58,6 @@ import { ExpenseTrackModule } from "@/apps/expensetrack/expensetrack.module"
     CashflowAgent,
     CreateThreadCommandHandler,
     FetchThreadByIdQueryHandler,
-    RepoService,
   ],
 })
 export class IntelligenceModule {}

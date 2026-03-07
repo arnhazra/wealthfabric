@@ -28,6 +28,5 @@ import { FindEventsByUserQueryHandler } from "./queries/handler/find-event-by-us
     DeleteEventCommandHandler,
     FindEventsByUserQueryHandler,
   ],
-  exports: [EventRepository],
 })
 export class PlannerModule {}

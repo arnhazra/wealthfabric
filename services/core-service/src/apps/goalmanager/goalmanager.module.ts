@@ -37,6 +37,5 @@ import { config } from "@/config"
     FindGoalByIdQueryHandler,
     FindNearestGoalQueryHandler,
   ],
-  exports: [GoalRepository],
 })
 export class GoalManagerModule {}

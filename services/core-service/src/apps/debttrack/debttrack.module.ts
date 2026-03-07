@@ -35,6 +35,5 @@ import { FindDebtsByUserQueryHandler } from "./queries/handler/find-debt-by-user
     FindDebtsByUserQueryHandler,
     FindDebtByIdQueryHandler,
   ],
-  exports: [DebtRepository],
 })
 export class DebtTrackModule {}
