@@ -11,13 +11,6 @@ import { FetchThreadByIdQueryHandler } from "./queries/handler/fetch-thread-by-i
 import { HttpModule } from "@nestjs/axios"
 import { config } from "@/config"
 import { ChatStrategy } from "./strategies/chat.strategy"
-import { SpaceModule } from "@/apps/assetmanager/space/space.module"
-import { AssetModule } from "@/apps/assetmanager/asset/asset.module"
-import { DebtTrackModule } from "@/apps/debttrack/debttrack.module"
-import { GoalManagerModule } from "@/apps/goalmanager/goalmanager.module"
-import { CashFlowModule } from "@/apps/cashflow/cashflow.module"
-import { PlannerModule } from "@/apps/planner/planner.module"
-import { ExpenseTrackModule } from "@/apps/expensetrack/expensetrack.module"
 
 @Module({
   imports: [
@@ -31,13 +24,6 @@ import { ExpenseTrackModule } from "@/apps/expensetrack/expensetrack.module"
       [{ name: Thread.name, schema: ThreadSchema }],
       GeneralDbConnectionMap.Platform
     ),
-    SpaceModule,
-    AssetModule,
-    DebtTrackModule,
-    GoalManagerModule,
-    CashFlowModule,
-    PlannerModule,
-    ExpenseTrackModule,
   ],
   controllers: [IntelligenceController],
   providers: [
