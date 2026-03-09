@@ -4,6 +4,7 @@
 
 - Updated cashflow app to have update & delete cashflow functionality
 - Dependency updates, Bug fixes & performance improvements
+- Added detailed architecture & workflows in readme
 
 ## Version 3.7.0
 
