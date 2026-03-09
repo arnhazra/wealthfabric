@@ -13,17 +13,6 @@
 - **Multi-Currency & Aggregation:** Supports multiple currencies and can aggregate balances from different accounts for a unified view.
 - **Open-Source & Extensible:** Built in TypeScript/Node, WealthFabric is fully open source (AGPL-3.0), allowing developers to extend modules or integrate new services (e.g. bank APIs, crypto exchanges).
 
-## Tech Stack
-
-WealthFabric’s architecture is based on modern, scalable frameworks:
-
-- **LangChain (LLM Framework):** An open-source orchestration toolkit for building applications with large language models. LangChain provides modular “chains” and agent support so the platform can integrate LLMs into workflows (e.g. financial analysis agents that call out to MongoDB or REST APIs). Using LangChain means we can easily experiment with different LLMs or prompt strategies when generating insights.
-- **NestJS (Backend API):** A progressive, TypeScript-based Node.js framework for building scalable server-side applications. WealthFabric’s core business logic lives in a NestJS app. NestJS’s modular structure allows separation of domains (assets, expenses, goals, etc.) and supports both REST and GraphQL. It also has built-in support for microservices if we want to distribute components independently.
-- **Next.js (Frontend UI):** A React framework by Vercel for building fast, SEO-friendly web apps. The UI is a Next.js app (written in TypeScript) that runs on Vercel. It handles client-side interactions, forms, and charts, while fetching data via the NestJS API. Next.js enables server-side rendering (for initial page loads) and client-side hydration for a smooth user experience.
-- **MongoDB (Primary Database):** A document-oriented NoSQL database. We use MongoDB to persist all user data – accounts, transactions, goals, etc. Its flexible JSON-like schema (BSON) allows us to evolve data models over time (for example, adding new fields without downtime). MongoDB’s scalability is ideal for handling growing user data.
-- **Redis (In-Memory Store):** A fast in-memory key-value store. In WealthFabric Redis is used for configuration and caching (e.g. storing computed settings, session data, or intermediate results). Because Redis is _“the world’s fastest in-memory database”_, it can quickly serve frequently-accessed data and reduce load on MongoDB.
-- **Vercel Cron Jobs:** A cloud-based cron scheduler (built into Vercel) for running periodic background tasks. We define cron expressions (e.g. daily or weekly schedules) in `vercel.json`, and Vercel will trigger HTTP endpoints at those times. For example, a monthly job might recalculate interest on savings or send summary emails. Using Vercel’s Cron feature means we don’t need a separate server for scheduling.
-
 ## Architecture & Workflows
 
 ![HLD](architecture.png)
@@ -39,6 +28,17 @@ WealthFabric follows a modular, service-oriented design:
 - **Data Flow:** User data (accounts, transactions, etc.) is stored in MongoDB. The backend can also fetch external data as needed (e.g. stock prices from an API). Redis is used to cache things like user settings or recent queries to speed up repeated operations. When a user requests an AI insight, LangChain may use either MongoDB or external APIs as retrieval sources before querying the LLM. All inter-service communication is via HTTP/HTTPS APIs (there is no monolithic monolith).
 
 - **High-Level Diagram:** A typical request flows like this: the browser (Next.js) calls a NestJS endpoint; NestJS retrieves data from MongoDB/Redis or calls LangChain; LangChain might in turn query an LLM (e.g. OpenAI’s GPT) and return a result; NestJS sends JSON back to the UI. Scheduled tasks are invoked independently: Vercel Cron hits a Next.js API route (`/api/cron/*`), which executes a task in the Cron Service.
+
+## Tech Stack
+
+WealthFabric’s architecture is based on modern, scalable frameworks:
+
+- **LangChain (LLM Framework):** An open-source orchestration toolkit for building applications with large language models. LangChain provides modular “chains” and agent support so the platform can integrate LLMs into workflows (e.g. financial analysis agents that call out to MongoDB or REST APIs). Using LangChain means we can easily experiment with different LLMs or prompt strategies when generating insights.
+- **NestJS (Backend API):** A progressive, TypeScript-based Node.js framework for building scalable server-side applications. WealthFabric’s core business logic lives in a NestJS app. NestJS’s modular structure allows separation of domains (assets, expenses, goals, etc.) and supports both REST and GraphQL. It also has built-in support for microservices if we want to distribute components independently.
+- **Next.js (Frontend UI):** A React framework by Vercel for building fast, SEO-friendly web apps. The UI is a Next.js app (written in TypeScript) that runs on Vercel. It handles client-side interactions, forms, and charts, while fetching data via the NestJS API. Next.js enables server-side rendering (for initial page loads) and client-side hydration for a smooth user experience.
+- **MongoDB (Primary Database):** A document-oriented NoSQL database. We use MongoDB to persist all user data – accounts, transactions, goals, etc. Its flexible JSON-like schema (BSON) allows us to evolve data models over time (for example, adding new fields without downtime). MongoDB’s scalability is ideal for handling growing user data.
+- **Redis (In-Memory Store):** A fast in-memory key-value store. In WealthFabric Redis is used for configuration and caching (e.g. storing computed settings, session data, or intermediate results). Because Redis is _“the world’s fastest in-memory database”_, it can quickly serve frequently-accessed data and reduce load on MongoDB.
+- **Vercel Cron Jobs:** A cloud-based cron scheduler (built into Vercel) for running periodic background tasks. We define cron expressions (e.g. daily or weekly schedules) in `vercel.json`, and Vercel will trigger HTTP endpoints at those times. For example, a monthly job might recalculate interest on savings or send summary emails. Using Vercel’s Cron feature means we don’t need a separate server for scheduling.
 
 ## Component Breakdown
 
@@ -63,7 +63,7 @@ WealthFabric follows a modular, service-oriented design:
 
 Follow these steps to run WealthFabric locally:
 
-1. **Prerequisites:** Ensure you have Node.js (v18+), npm or Yarn, and a MongoDB instance. Redis is optional but recommended for caching. You will also need an API key for an LLM provider (e.g. OpenAI).
+1. **Prerequisites:** Ensure you have Node.js (v18+), npm, and a MongoDB instance. Redis is optional but recommended for caching. You will also need an API key for an LLM provider (e.g. OpenAI).
 
 2. **Clone the repo:**
 
