@@ -27,7 +27,7 @@ jobs:
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: wallstreet-api
+          app-name: core-service-wallstreet
           publish-profile: ${{ secrets.AZURE_CORE_APP_PUBLISH_PROFILE }}
           package: services/core-service
 
