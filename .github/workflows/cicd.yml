@@ -64,7 +64,7 @@ jobs:
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: wealthfabric
+          app-name: wallstreet
           publish-profile: ${{ secrets.AZURE_UI_APP_PUBLISH_PROFILE }}
 
   CRON-SERVICE-DEPLOYMENT:
