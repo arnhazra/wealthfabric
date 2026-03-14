@@ -18,7 +18,10 @@ import { UpdateCashflowHandler } from "./commands/handler/update-cashflow.handle
 @Module({
   imports: [
     CqrsModule,
-    EntityModule.forRoot(config.COSMOS_DB_URI, AppsDbConnectionMap.CashFlow),
+    EntityModule.forRoot(
+      config.AZURE_COSMOS_DB_CONNECTION_STRING,
+      AppsDbConnectionMap.CashFlow
+    ),
     EntityModule.forFeature(
       [{ name: Cashflow.name, schema: CashflowSchema }],
       AppsDbConnectionMap.CashFlow

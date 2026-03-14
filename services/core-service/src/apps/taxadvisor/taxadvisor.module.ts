@@ -16,7 +16,10 @@ import { config } from "@/config"
   imports: [
     HttpModule,
     CqrsModule,
-    EntityModule.forRoot(config.COSMOS_DB_URI, AppsDbConnectionMap.TaxAdvisor),
+    EntityModule.forRoot(
+      config.AZURE_COSMOS_DB_CONNECTION_STRING,
+      AppsDbConnectionMap.TaxAdvisor
+    ),
     EntityModule.forFeature(
       [{ name: Thread.name, schema: ThreadSchema }],
       AppsDbConnectionMap.TaxAdvisor

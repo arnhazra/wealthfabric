@@ -9,7 +9,10 @@ import { WidgetModule } from "./widget/widget.module"
 
 @Module({
   imports: [
-    EntityModule.forRoot(config.COSMOS_DB_URI, GeneralDbConnectionMap.Platform),
+    EntityModule.forRoot(
+      config.AZURE_COSMOS_DB_CONNECTION_STRING,
+      GeneralDbConnectionMap.Platform
+    ),
     AnalyticsModule,
     ConfigModule,
     IntelligenceModule,

@@ -4,8 +4,10 @@ envConfig({ path: "./.env.development" })
 export const config = {
   NODE_ENV: process.env.NODE_ENV,
   PLATFORM_NAME: process.env.PLATFORM_NAME,
-  COSMOS_DB_URI: process.env.COSMOS_DB_URI,
-  REDIS_URI: process.env.REDIS_URI,
+  AZURE_COSMOS_DB_CONNECTION_STRING:
+    process.env.AZURE_COSMOS_DB_CONNECTION_STRING,
+  AZURE_APP_CONFIG_CONNECTION_STRING:
+    process.env.AZURE_APP_CONFIG_CONNECTION_STRING,
   AI_MODEL_API_KEY: process.env.AI_MODEL_API_KEY,
   AI_MODEL_DEPLOYMENT_URI: process.env.AI_MODEL_DEPLOYMENT_URI,
   AI_MODEL_MODEL_NAME: process.env.AI_MODEL_MODEL_NAME,

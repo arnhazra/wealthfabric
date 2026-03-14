@@ -17,7 +17,10 @@ import { config } from "@/config"
 @Module({
   imports: [
     CqrsModule,
-    EntityModule.forRoot(config.COSMOS_DB_URI, AppsDbConnectionMap.GoalManager),
+    EntityModule.forRoot(
+      config.AZURE_COSMOS_DB_CONNECTION_STRING,
+      AppsDbConnectionMap.GoalManager
+    ),
     EntityModule.forFeature(
       [{ name: Goal.name, schema: GoalSchema }],
       AppsDbConnectionMap.GoalManager
