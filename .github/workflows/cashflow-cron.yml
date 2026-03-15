@@ -1,4 +1,4 @@
-name: Daily API Trigger
+name: Daily Cashflow Execution
 
 on:
   schedule:
@@ -6,9 +6,26 @@ on:
   workflow_dispatch:
 
 jobs:
-  call-api:
+  execute-cashflow:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Call API
+      - name: Call Cashflow API with retry
         run: |
-          curl -X POST https://core-service-wallstreet.azurewebsites.net/apps/cashflow/execute
+          for i in {1..10}; do
+            echo "Attempt $i..."
+
+            response=$(curl -s -o /dev/null -w "%{http_code}" \
+              -X POST https://core-service-wallstreet.azurewebsites.net/apps/cashflow/execute)
+
+            if [[ "$response" == "200" || "$response" == "201" || "$response" == "202" ]]; then
+              echo "Cashflow execution succeeded with status $response"
+              exit 0
+            fi
+
+            echo "Failed with status $response"
+            sleep 30
+          done
+
+          echo "All retries failed"
+          exit 1

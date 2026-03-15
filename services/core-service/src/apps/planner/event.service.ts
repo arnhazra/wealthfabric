@@ -48,7 +48,7 @@ export class EventService {
       )
 
       const parsedExpenseCategories: ExpenseCategoryConfig = JSON.parse(
-        expenseCategoryConfig
+        JSON.stringify(expenseCategoryConfig)
       )
 
       const customEvents = events.map((event) => ({
@@ -185,6 +185,7 @@ export class EventService {
 
       return allEvents
     } catch (error) {
+      console.log(error)
       throw new Error(statusMessages.connectionError)
     }
   }
