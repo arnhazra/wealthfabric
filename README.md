@@ -4,36 +4,6 @@ An AI-driven wealth management platform that unifies personal finance into a sin
 
 ---
 
-## Apps Overview
-
-The platform is modular, with each app solving a specific financial problem:
-
-- **AssetManager**  
-  Organize and manage financial assets (stocks, crypto, real estate, cash) with real-time valuation and portfolio visibility.
-
-- **ExpenseTrack**  
-  Monitor spending patterns with categorized transactions, budgets, and analytics dashboards.
-
-- **WealthPlanner**  
-  Define financial goals (retirement, savings, investments) and track progress with AI-assisted projections.
-
-- **DebtTrack**  
-  Track liabilities (loans, credit cards, mortgages) with repayment schedules and outstanding balances.
-
-- **CashFlow**  
-  Automate and visualize inflows/outflows across accounts for better liquidity management.
-
-- **Calendar**  
-  Financial planning timeline for mapping future events like investments, EMIs, or tax deadlines.
-
-- **TaxAdvisor**  
-  AI-powered tax planning and optimization suggestions based on user financial data.
-
-- **Discover**  
-  Real-time financial news, market trends, and personalized insights.
-
----
-
 ## Architecture Overview
 
 ![Architecture](architecture.svg)
@@ -71,6 +41,36 @@ The system follows a modular, service-oriented architecture:
 
 ---
 
+## Apps Overview
+
+The platform is modular, with each app solving a specific financial problem:
+
+- **AssetManager**  
+  Organize and manage financial assets (stocks, crypto, real estate, cash) with real-time valuation and portfolio visibility.
+
+- **ExpenseTrack**  
+  Monitor spending patterns with categorized transactions, budgets, and analytics dashboards.
+
+- **WealthPlanner**  
+  Define financial goals (retirement, savings, investments) and track progress with AI-assisted projections.
+
+- **DebtTrack**  
+  Track liabilities (loans, credit cards, mortgages) with repayment schedules and outstanding balances.
+
+- **CashFlow**  
+  Automate and visualize inflows/outflows across accounts for better liquidity management.
+
+- **Calendar**  
+  Financial planning timeline for mapping future events like investments, EMIs, or tax deadlines.
+
+- **TaxAdvisor**  
+  AI-powered tax planning and optimization suggestions based on user financial data.
+
+- **Discover**  
+  Real-time financial news, market trends, and personalized insights.
+
+---
+
 ## Data Flow
 
 1. User interacts with UI (Next.js)
@@ -103,5 +103,3 @@ The system follows a modular, service-oriented architecture:
 - Open-source and developer-friendly
 
 ---
-
-For full documentation, refer to the original README.
