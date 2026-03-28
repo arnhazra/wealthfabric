@@ -13,8 +13,8 @@ export function AppCard({ app }: AppCardProps) {
   const AppIcon = (Icons as any)[app.icon] || Icons.HelpCircle
 
   return (
-    <Link href={app.url}>
-      <Card className="bg-background border border-border p-2 rounded-3xl hover:shadow-lg hover:shadow-primary/20 cursor-pointer">
+    <Link href={app.url} className="h-full">
+      <Card className="bg-background border border-border p-2 rounded-3xl hover:shadow-lg hover:shadow-primary/20 cursor-pointer h-full flex flex-col">
         <CardHeader className="flex justify-between mt-6 items-center">
           <div>
             <p className="text-xs">{PLATFORM_NAME}</p>
@@ -24,7 +24,7 @@ export function AppCard({ app }: AppCardProps) {
             <AppIcon className="h-5 w-5" />
           </IconContainer>
         </CardHeader>
-        <CardContent className="mb-6">
+        <CardContent className="mb-6 flex-1">
           <p className="text-sm leading-relaxed justify">{app.description}</p>
         </CardContent>
       </Card>
