@@ -1,7 +1,29 @@
+const cssVar = (variable: string, fallback: string): string => {
+  if (typeof document !== "undefined") {
+    const value = getComputedStyle(document.documentElement)
+      .getPropertyValue(variable)
+      .trim()
+    if (value) return value
+  }
+  return fallback
+}
+
+const fallbackColor = "#000000"
+
 export const colorVars = {
-  main: "#121212",
-  background: "#151616",
-  border: "#27272a",
-  primary: "#20d760",
-  secondary: "#ff2056",
+  get main() {
+    return cssVar("--color-main", fallbackColor)
+  },
+  get background() {
+    return cssVar("--color-background", fallbackColor)
+  },
+  get border() {
+    return cssVar("--color-border", fallbackColor)
+  },
+  get primary() {
+    return cssVar("--color-primary", fallbackColor)
+  },
+  get secondary() {
+    return cssVar("--color-secondary", fallbackColor)
+  },
 }
