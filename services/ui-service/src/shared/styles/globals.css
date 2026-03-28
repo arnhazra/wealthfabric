@@ -81,6 +81,12 @@ body {
     20px 20px;
 }
 
+@utility hexagon-shape {
+  clip-path: path(
+    "M 28.1 5.0 Q 31.7 5.0, 33.6 8.2 L 39.8 18.9 Q 41.6 22.0, 39.8 25.1 L 33.6 35.8 Q 31.7 38.9, 28.1 38.9 L 15.9 38.9 Q 12.3 38.9, 10.4 35.8 L 4.2 25.1 Q 2.4 22.0, 4.2 18.9 L 10.4 8.2 Q 12.3 5.0, 15.9 5.0 Z"
+  );
+}
+
 .ui-soft-gradient {
   background-image: linear-gradient(75deg, #13547a 0%, #80d0c7 100%);
   background-size: cover;

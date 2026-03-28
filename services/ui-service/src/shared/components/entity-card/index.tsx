@@ -45,12 +45,12 @@ import { useRouter } from "nextjs-toploader/app"
 import MaskText from "../mask"
 
 const entityIconMap = {
-  [EntityType.ASSET]: <Banknote className="h-5 w-5" />,
-  [EntityType.ASSETGROUP]: <Layers2 className="h-5 w-5" />,
-  [EntityType.DEBT]: <CreditCard className="h-5 w-5" />,
-  [EntityType.GOAL]: <GoalIcon className="h-5 w-5" />,
-  [EntityType.NEWS]: <Newspaper className="h-5 w-5" />,
-  [EntityType.CASHFLOW]: <Workflow className="h-5 w-5" />,
+  [EntityType.ASSET]: <Banknote className="h-4 w-4" />,
+  [EntityType.ASSETGROUP]: <Layers2 className="h-4 w-4" />,
+  [EntityType.DEBT]: <CreditCard className="h-4 w-4" />,
+  [EntityType.GOAL]: <GoalIcon className="h-4 w-4" />,
+  [EntityType.NEWS]: <Newspaper className="h-4 w-4" />,
+  [EntityType.CASHFLOW]: <Workflow className="h-4 w-4" />,
 }
 
 type EntityCardProps<T extends keyof EntityMap> = {

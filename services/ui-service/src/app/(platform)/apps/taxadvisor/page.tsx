@@ -105,7 +105,7 @@ export default function Page() {
             <div className="text-center mt-8 max-w-xl mx-auto">
               <div className="flex justify-center mb-4">
                 <IconContainer>
-                  <Calculator className="h-5 w-5" />
+                  <Calculator className="h-4 w-4" />
                 </IconContainer>
               </div>
               <p className="text-primary">{PLATFORM_NAME} TaxAdvisor</p>

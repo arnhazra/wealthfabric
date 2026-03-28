@@ -9,14 +9,16 @@ interface IconContainerProps {
 const IconContainer = ({ ai, children }: IconContainerProps) => {
   if (ai) {
     return (
-      <div className="p-2 text-white rounded-full ui-soft-gradient">
+      <div className="w-11 h-11 flex items-center justify-center text-white hexagon-shape ui-soft-gradient">
         {children}
       </div>
     )
   }
 
   return (
-    <div className="p-2 bg-primary text-black rounded-full">{children}</div>
+    <div className="w-11 h-11 flex items-center justify-center bg-primary text-black hexagon-shape">
+      {children}
+    </div>
   )
 }
 

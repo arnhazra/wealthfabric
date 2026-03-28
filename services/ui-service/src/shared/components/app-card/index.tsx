@@ -21,7 +21,7 @@ export function AppCard({ app }: AppCardProps) {
             <h2 className="text-xl">{app.displayName}</h2>
           </div>
           <IconContainer>
-            <AppIcon className="h-5 w-5" />
+            <AppIcon className="h-4 w-4" />
           </IconContainer>
         </CardHeader>
         <CardContent className="mb-6 flex-1">

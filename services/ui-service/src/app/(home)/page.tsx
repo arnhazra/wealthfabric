@@ -152,7 +152,7 @@ export default function Page() {
               <h2 className="text-2xl">{openSourceConfig.data?.title}</h2>
             </div>
             <IconContainer>
-              <BookOpenIcon className="h-5 w-5" />
+              <BookOpenIcon className="h-4 w-4" />
             </IconContainer>
           </div>
           <p className="text-sm leading-relaxed mt-auto">
