@@ -1,6 +1,6 @@
 # ZetWealth
 
-An AI-driven wealth management platform that unifies personal finance into a single system — enabling users to manage assets, track spending, plan goals, and receive intelligent financial insights.
+An AI-driven wealth management platform that unifies personal finance into a single system - enabling users to manage assets, track spending, plan goals, and receive intelligent financial insights.
 
 ---
 
