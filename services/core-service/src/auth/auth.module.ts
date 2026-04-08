@@ -3,7 +3,7 @@ import { AuthService } from "./auth.service"
 import { AuthController } from "./auth.controller"
 import { UserRepository } from "./repositories/user.repository"
 import { User, UserSchema } from "./schemas/user.schema"
-import { GeneralDbConnectionMap } from "@/shared/entity/entity-db-connection.map"
+import { DbConnectionMap } from "@/shared/entity/entity-db-connection.map"
 import { CqrsModule } from "@nestjs/cqrs"
 import { CreateUserCommandHandler } from "./commands/handler/create-user.handler"
 import { UpdateAttributeCommandHandler } from "./commands/handler/update-attribute.handler"
@@ -24,15 +24,15 @@ import { FindUserByIdQueryHandler } from "./queries/handler/find-user-by-id.hand
     HttpModule,
     EntityModule.forRoot(
       config.AZURE_COSMOS_DB_CONNECTION_STRING,
-      GeneralDbConnectionMap.Auth
+      DbConnectionMap.Auth
     ),
     EntityModule.forFeature(
       [{ name: User.name, schema: UserSchema }],
-      GeneralDbConnectionMap.Auth
+      DbConnectionMap.Auth
     ),
     EntityModule.forFeature(
       [{ name: Token.name, schema: TokenSchema }],
-      GeneralDbConnectionMap.Auth
+      DbConnectionMap.Auth
     ),
   ],
   controllers: [AuthController],

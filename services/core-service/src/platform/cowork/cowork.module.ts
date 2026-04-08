@@ -2,7 +2,7 @@ import { Module } from "@nestjs/common"
 import { CoworkService } from "./cowork.service"
 import { CoworkController } from "./cowork.controller"
 import { CqrsModule } from "@nestjs/cqrs"
-import { GeneralDbConnectionMap } from "@/shared/entity/entity-db-connection.map"
+import { DbConnectionMap } from "@/shared/entity/entity-db-connection.map"
 import { Thread, ThreadSchema } from "./schemas/thread.schema"
 import { CreateThreadCommandHandler } from "./commands/handler/create-thread.handler"
 import { CoworkRepository } from "./cowork.repository"
@@ -23,13 +23,9 @@ import { EventAgent } from "./agents/event.agent"
   imports: [
     HttpModule,
     CqrsModule,
-    EntityModule.forRoot(
-      config.AZURE_COSMOS_DB_CONNECTION_STRING,
-      GeneralDbConnectionMap.Platform
-    ),
     EntityModule.forFeature(
       [{ name: Thread.name, schema: ThreadSchema }],
-      GeneralDbConnectionMap.Platform
+      DbConnectionMap.Platform
     ),
   ],
   controllers: [CoworkController],

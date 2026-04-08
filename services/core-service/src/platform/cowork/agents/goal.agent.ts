@@ -3,7 +3,7 @@ import { tool } from "langchain"
 import { Injectable } from "@nestjs/common"
 import { EventEmitter2 } from "@nestjs/event-emitter"
 import { z } from "zod"
-import { Goal } from "@/apps/wealthplanner/schemas/goal.schema"
+import { Goal } from "@/resources/goal/schemas/goal.schema"
 
 @Injectable()
 export class GoalAgent {

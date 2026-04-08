@@ -1,18 +1,18 @@
 import { Injectable } from "@nestjs/common"
-import { Token } from "../schemas/token.schema"
+import { Debt } from "./schemas/debt.schema"
 import { DbConnectionMap } from "@/shared/entity/entity-db-connection.map"
 import {
-  EntityModel,
   EntityRepository,
+  EntityModel,
   InjectEntityModel,
 } from "@/shared/entity/entity.repository"
 
 @Injectable()
-export class TokenRepository extends EntityRepository<Token> {
+export class DebtRepository extends EntityRepository<Debt> {
   constructor(
-    @InjectEntityModel(Token.name, DbConnectionMap.Auth)
-    private tokenModel: EntityModel<Token>
+    @InjectEntityModel(Debt.name, DbConnectionMap.Resource)
+    private debtModel: EntityModel<Debt>
   ) {
-    super(tokenModel)
+    super(debtModel)
   }
 }

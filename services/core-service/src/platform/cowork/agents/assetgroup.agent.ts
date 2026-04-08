@@ -3,7 +3,7 @@ import { tool } from "langchain"
 import { Injectable } from "@nestjs/common"
 import { EventEmitter2 } from "@nestjs/event-emitter"
 import { z } from "zod"
-import { AssetGroup } from "@/apps/assetmanager/assetgroup/schemas/assetgroup.schema"
+import { AssetGroup } from "@/resources/assetgroup/schemas/assetgroup.schema"
 
 @Injectable()
 export class AssetGroupAgent {

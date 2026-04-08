@@ -3,7 +3,7 @@ import { tool } from "langchain"
 import { Injectable } from "@nestjs/common"
 import { EventEmitter2 } from "@nestjs/event-emitter"
 import { z } from "zod"
-import { Cashflow } from "@/apps/cashflow/schemas/cashflow.schema"
+import { Cashflow } from "@/resources/cashflow/schemas/cashflow.schema"
 
 @Injectable()
 export class CashflowAgent {

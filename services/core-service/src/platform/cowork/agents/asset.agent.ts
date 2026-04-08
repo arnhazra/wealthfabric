@@ -4,7 +4,7 @@ import { tool } from "langchain"
 import { Injectable } from "@nestjs/common"
 import { EventEmitter2 } from "@nestjs/event-emitter"
 import { z } from "zod"
-import { Asset } from "@/apps/assetmanager/asset/schemas/asset.schema"
+import { Asset } from "@/resources/asset/schemas/asset.schema"
 
 @Injectable()
 export class AssetAgent {

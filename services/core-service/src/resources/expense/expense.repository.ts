@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common"
+import { Expense } from "./schemas/expense.schema"
 import { DbConnectionMap } from "@/shared/entity/entity-db-connection.map"
-import { Thread } from "./schemas/thread.schema"
 import {
   EntityModel,
   EntityRepository,
@@ -8,11 +8,11 @@ import {
 } from "@/shared/entity/entity.repository"
 
 @Injectable()
-export class CoworkRepository extends EntityRepository<Thread> {
+export class ExpenseRepository extends EntityRepository<Expense> {
   constructor(
-    @InjectEntityModel(Thread.name, DbConnectionMap.Platform)
-    private threadModel: EntityModel<Thread>
+    @InjectEntityModel(Expense.name, DbConnectionMap.Resource)
+    private expenseModel: EntityModel<Expense>
   ) {
-    super(threadModel)
+    super(expenseModel)
   }
 }

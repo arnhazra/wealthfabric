@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common"
 import { User } from "../schemas/user.schema"
-import { GeneralDbConnectionMap } from "@/shared/entity/entity-db-connection.map"
+import { DbConnectionMap } from "@/shared/entity/entity-db-connection.map"
 import {
   EntityModel,
   EntityRepository,
@@ -11,7 +11,7 @@ import { createOrConvertObjectId } from "@/shared/entity/entity.schema"
 @Injectable()
 export class UserRepository extends EntityRepository<User> {
   constructor(
-    @InjectEntityModel(User.name, GeneralDbConnectionMap.Auth)
+    @InjectEntityModel(User.name, DbConnectionMap.Auth)
     private userModel: EntityModel<User>
   ) {
     super(userModel)

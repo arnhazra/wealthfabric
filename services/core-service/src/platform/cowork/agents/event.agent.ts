@@ -3,7 +3,7 @@ import { tool } from "langchain"
 import { Injectable } from "@nestjs/common"
 import { EventEmitter2 } from "@nestjs/event-emitter"
 import { z } from "zod"
-import { Event } from "@/apps/calendar/schemas/event.schema"
+import { Event } from "@/resources/event/schemas/event.schema"
 
 @Injectable()
 export class EventAgent {
