@@ -20,18 +20,18 @@ import { useQueryClient } from "@tanstack/react-query"
 import { formatDate } from "@/shared/lib/date-formatter"
 import {
   amountKeys,
-  deleteEntityAPIUriMap,
-  editEntityUrlMap,
-  EntityTypeForDetailModal,
+  deleteResourceAPIUriMap,
+  editResourceUrlMap,
+  ResourceTypeForDetailModal,
   excludedKeys,
 } from "./data"
 import api from "@/shared/lib/ky-api"
 import Link from "next/link"
-import { EntityType } from "../entity-card/data"
+import { ResourceType } from "../resource-card/data"
 
-type EntityDetailsProps = {
-  entityType: EntityTypeForDetailModal
-  entity: Asset | Debt | Goal | Cashflow
+type ResourceDetailsProps = {
+  resourceType: ResourceTypeForDetailModal
+  resource: Asset | Debt | Goal | Cashflow
   children: ReactNode
 }
 
@@ -42,59 +42,59 @@ enum DeleteQueryKey {
   CASHFLOW = "get-cashflows",
 }
 
-export function EntityDetails({
-  entityType,
-  entity,
+export function ResourceDetails({
+  resourceType,
+  resource,
   children,
-}: EntityDetailsProps) {
+}: ResourceDetailsProps) {
   const [{ user }] = useUserContext()
   const [open, setOpen] = useState(false)
   const queryClient = useQueryClient()
   const { confirm } = useConfirmContext()
-  const [entityBadgeText, setEnytityBadgeText] = useState("")
+  const [resourceBadgeText, setEnytityBadgeText] = useState("")
   const [displayName, setDisplayName] = useState("")
 
   useEffect(() => {
-    switch (entityType) {
-      case EntityTypeForDetailModal.ASSET:
-        setEnytityBadgeText((entity as Asset).assetType.replace("_", " "))
-        setDisplayName((entity as Asset).assetName)
+    switch (resourceType) {
+      case ResourceTypeForDetailModal.ASSET:
+        setEnytityBadgeText((resource as Asset).assetType.replace("_", " "))
+        setDisplayName((resource as Asset).assetName)
         break
-      case EntityTypeForDetailModal.DEBT:
+      case ResourceTypeForDetailModal.DEBT:
         setEnytityBadgeText("DEBT")
-        setDisplayName((entity as Debt).debtPurpose)
+        setDisplayName((resource as Debt).debtPurpose)
         break
-      case EntityTypeForDetailModal.GOAL:
+      case ResourceTypeForDetailModal.GOAL:
         setEnytityBadgeText("GOAL")
-        setDisplayName(formatDate((entity as Goal).goalDate))
+        setDisplayName(formatDate((resource as Goal).goalDate))
         break
-      case EntityTypeForDetailModal.CASHFLOW:
+      case ResourceTypeForDetailModal.CASHFLOW:
         setEnytityBadgeText("CASHFLOW")
-        setDisplayName((entity as Cashflow).description)
+        setDisplayName((resource as Cashflow).description)
         break
       default:
         break
     }
-  }, [entityType, entity])
+  }, [resourceType, resource])
 
-  const deleteEntity = async (): Promise<void> => {
+  const deleteResource = async (): Promise<void> => {
     setOpen(false)
     const confirmed = await confirm({
-      title: `Delete ${entityType}`,
-      desc: `Are you sure you want to delete this ${entityType}?`,
+      title: `Delete ${resourceType}`,
+      desc: `Are you sure you want to delete this ${resourceType}?`,
     })
 
     if (confirmed) {
       try {
         await api.delete(
-          `${deleteEntityAPIUriMap[entityType as keyof typeof deleteEntityAPIUriMap]}/${(entity as Asset | Debt | Goal | Cashflow)._id}`
+          `${deleteResourceAPIUriMap[resourceType as keyof typeof deleteResourceAPIUriMap]}/${(resource as Asset | Debt | Goal | Cashflow)._id}`
         )
         queryClient.refetchQueries({
           queryKey: [
-            `${DeleteQueryKey[entityType.toUpperCase() as keyof typeof DeleteQueryKey]}`,
+            `${DeleteQueryKey[resourceType.toUpperCase() as keyof typeof DeleteQueryKey]}`,
           ],
         })
-        notify(`${uiConstants.entityDeleted} ${entityType}`, "success")
+        notify(`${uiConstants.resourceDeleted} ${resourceType}`, "success")
       } catch (error) {
         notify(uiConstants.genericError, "error")
       }
@@ -104,8 +104,8 @@ export function EntityDetails({
   const isAmount = (key: keyof Asset): boolean => amountKeys.includes(key)
 
   if (
-    (entityType as unknown as EntityType) === EntityType.ASSETGROUP ||
-    (entityType as unknown as EntityType) === EntityType.THREAD
+    (resourceType as unknown as ResourceType) === ResourceType.ASSETGROUP ||
+    (resourceType as unknown as ResourceType) === ResourceType.THREAD
   ) {
     return <>{children}</>
   }
@@ -124,13 +124,13 @@ export function EntityDetails({
                 variant="default"
                 className="bg-primary w-fit text-black mt-2"
               >
-                {entityBadgeText}
+                {resourceBadgeText}
               </Badge>
               <DialogDescription></DialogDescription>
             </div>
             <div className="flex gap-2">
               <Link
-                href={`${editEntityUrlMap[entityType as keyof typeof editEntityUrlMap]}?id=${(entity as Asset | Debt | Goal | Cashflow)._id}`}
+                href={`${editResourceUrlMap[resourceType as keyof typeof editResourceUrlMap]}?id=${(resource as Asset | Debt | Goal | Cashflow)._id}`}
               >
                 <Button
                   variant="default"
@@ -140,7 +140,7 @@ export function EntityDetails({
                   <Pen className="text-black h-4 w-4" />
                 </Button>
               </Link>
-              <Button onClick={deleteEntity} variant="secondary" size="icon">
+              <Button onClick={deleteResource} variant="secondary" size="icon">
                 <Trash className="h-4 w-4" />
               </Button>
             </div>
@@ -148,7 +148,7 @@ export function EntityDetails({
         </DialogHeader>
         <div className="grid gap-6">
           <ul className="grid gap-3 text-sm text-muted-foreground">
-            {Object.entries(entity ?? {})
+            {Object.entries(resource ?? {})
               .filter(([key]) => !excludedKeys.includes(key))
               .map(([key, value]) => (
                 <div key={key} className="flex justify-between items-center">

@@ -87,7 +87,7 @@ export default function Page() {
         queryClient.refetchQueries({
           queryKey: ["get-expenses"],
         })
-        notify(`${uiConstants.entityDeleted} expense`, "success")
+        notify(`${uiConstants.resourceDeleted} expense`, "success")
       } catch (error) {
         notify(uiConstants.genericError, "error")
       }

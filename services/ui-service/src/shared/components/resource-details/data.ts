@@ -29,21 +29,21 @@ export const amountKeys = [
   "remainingTotal",
 ]
 
-export const editEntityUrlMap = {
+export const editResourceUrlMap = {
   asset: "/apps/assetmanager/asset/edit",
   debt: "/apps/debttrack/createoreditdebt",
   goal: "/apps/wealthplanner/createoreditgoal",
   cashflow: "/apps/cashflow/createoreditcashflow",
 }
 
-export const deleteEntityAPIUriMap = {
+export const deleteResourceAPIUriMap = {
   asset: endPoints.asset,
   debt: endPoints.debt,
   goal: endPoints.goal,
   cashflow: endPoints.cashflow,
 }
 
-export enum EntityTypeForDetailModal {
+export enum ResourceTypeForDetailModal {
   ASSET = "asset",
   DEBT = "debt",
   GOAL = "goal",

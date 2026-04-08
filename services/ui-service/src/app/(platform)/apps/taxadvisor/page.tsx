@@ -3,8 +3,11 @@ import { endPoints } from "@/shared/constants/api-endpoints"
 import HTTPMethods from "@/shared/constants/http-methods"
 import useQuery from "@/shared/hooks/use-query"
 import { Thread } from "@/shared/constants/types"
-import { AddEntityCard, EntityCard } from "@/shared/components/entity-card"
-import { EntityType } from "@/shared/components/entity-card/data"
+import {
+  AddResourceCard,
+  ResourceCard,
+} from "@/shared/components/resource-card"
+import { ResourceType } from "@/shared/components/resource-card/data"
 
 export default function Page() {
   const threads = useQuery<Thread[]>({
@@ -14,9 +17,9 @@ export default function Page() {
   })
 
   const renderThreads = threads?.data?.map((thread) => (
-    <EntityCard
-      entityType={EntityType.THREAD}
-      entity={thread}
+    <ResourceCard
+      resourceType={ResourceType.THREAD}
+      resource={thread}
       key={thread._id}
     />
   ))
@@ -24,7 +27,7 @@ export default function Page() {
   return (
     <section>
       <div className="mx-auto grid gap-4 xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-4">
-        <AddEntityCard entityType={EntityType.THREAD} />
+        <AddResourceCard resourceType={ResourceType.THREAD} />
         {renderThreads}
       </div>
     </section>

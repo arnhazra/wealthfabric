@@ -15,7 +15,7 @@ export const uiConstants = {
   notification: "Notification",
   copiedToClipBoard: "Copied to clipboard!",
   getStartedButton: "Get Started",
-  entityDeleted: "Successfully deleted the",
+  resourceDeleted: "Successfully deleted the",
   linkedinURI: "https://www.linkedin.com/in/arnhazra",
   confirmDescription:
     "This action cannot be undone. Click continue to proceed, or cancel to go back.",

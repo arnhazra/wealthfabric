@@ -3,8 +3,8 @@ import { endPoints } from "@/shared/constants/api-endpoints"
 import HTTPMethods from "@/shared/constants/http-methods"
 import useQuery from "@/shared/hooks/use-query"
 import { FindNewsResponse } from "@/shared/constants/types"
-import { EntityCard } from "@/shared/components/entity-card"
-import { EntityType } from "@/shared/components/entity-card/data"
+import { ResourceCard } from "@/shared/components/resource-card"
+import { ResourceType } from "@/shared/components/resource-card/data"
 import { useUserContext } from "@/context/user.provider"
 
 export default function Page() {
@@ -27,7 +27,11 @@ export default function Page() {
           (article.description && searchPattern.test(article.description))
       )
       .map((article, index) => (
-        <EntityCard entityType={EntityType.NEWS} entity={article} key={index} />
+        <ResourceCard
+          resourceType={ResourceType.NEWS}
+          resource={article}
+          key={index}
+        />
       ))
   }
 

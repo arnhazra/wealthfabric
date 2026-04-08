@@ -12,8 +12,11 @@ import { useConfirmContext } from "@/shared/providers/confirm.provider"
 import { uiConstants } from "@/shared/constants/global-constants"
 import notify from "@/shared/hooks/use-notify"
 import IconContainer from "@/shared/components/icon-container"
-import { AddEntityCard, EntityCard } from "@/shared/components/entity-card"
-import { EntityType } from "@/shared/components/entity-card/data"
+import {
+  AddResourceCard,
+  ResourceCard,
+} from "@/shared/components/resource-card"
+import { ResourceType } from "@/shared/components/resource-card/data"
 import { useUserContext } from "@/context/user.provider"
 import { buildQueryUrl } from "@/shared/lib/build-url"
 import api from "@/shared/lib/ky-api"
@@ -42,9 +45,9 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
 
   const renderAssets = assets?.data?.map((asset) => {
     return (
-      <EntityCard
-        entityType={EntityType.ASSET}
-        entity={asset}
+      <ResourceCard
+        resourceType={ResourceType.ASSET}
+        resource={asset}
         key={asset._id}
       />
     )
@@ -103,7 +106,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
           ]}
         />
         <div className="mx-auto grid gap-4 xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-4 mt-4">
-          <AddEntityCard entityType={EntityType.ASSET} />
+          <AddResourceCard resourceType={ResourceType.ASSET} />
           {renderAssets}
         </div>
       </section>
