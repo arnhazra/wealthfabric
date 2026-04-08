@@ -11,22 +11,12 @@ import { DebtAgent } from "../agents/debt.agent"
 import { ExpenseAgent } from "../agents/expense.agent"
 import { LLMService } from "@/shared/llm/llm.service"
 import { CashflowAgent } from "../agents/cashflow.agent"
-import { EntityType } from "../dto/chat.dto"
 import { ConfigService } from "@/platform/config/config.service"
 import { EventAgent } from "../agents/event.agent"
 
 export interface ChatArgs {
   thread: Thread[]
   prompt: string
-  user: User
-  entityDetails?: string
-  entityType?: EntityType
-  summarizeRequest?: boolean
-}
-
-export interface SummarizeArgs {
-  entityType: EntityType
-  entityDetails: string
   user: User
 }
 
@@ -43,18 +33,6 @@ export class ChatStrategy {
     private readonly configService: ConfigService,
     private readonly llmService: LLMService
   ) {}
-
-  private async getSummarizerSystemInstruction(args: SummarizeArgs) {
-    const data = await this.configService.getConfig(
-      "summarizer-system-instruction"
-    )
-    return data
-      .replaceAll("{platformName}", config.PLATFORM_NAME)
-      .replaceAll("{userId}", String(args.user._id))
-      .replaceAll("{baseCurrency}", args.user.baseCurrency)
-      .replaceAll("{entityType}", args.entityType)
-      .replaceAll("{entityDetails}", args.entityDetails)
-  }
 
   private async getChatSystemInstruction(user: User) {
     const data = await this.configService.getConfig("chat-system-instruction")
@@ -96,17 +74,8 @@ export class ChatStrategy {
   }
 
   private async getSystemInstruction(args: ChatArgs) {
-    const { user, entityDetails, entityType, summarizeRequest } = args
-
-    if (!summarizeRequest) {
-      return this.getChatSystemInstruction(user)
-    }
-
-    return this.getSummarizerSystemInstruction({
-      user,
-      entityDetails,
-      entityType,
-    })
+    const { user } = args
+    return this.getChatSystemInstruction(user)
   }
 
   private buildMessages(args: ChatArgs, systemInstruction: string) {

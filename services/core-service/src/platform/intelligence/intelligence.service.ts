@@ -43,7 +43,7 @@ export class IntelligenceService {
     chatDto: ChatDto,
     userId: string
   ): AsyncGenerator<{ type: string; data: string }> {
-    const { prompt, entityDetails, entityType, summarizeRequest } = chatDto
+    const { prompt } = chatDto
     const threadId = chatDto.threadId ?? createOrConvertObjectId().toString()
     const thread = await this.getThreadById(threadId, !chatDto.threadId)
 
@@ -55,9 +55,6 @@ export class IntelligenceService {
       thread,
       prompt,
       user,
-      entityDetails,
-      entityType,
-      summarizeRequest,
     }
 
     yield { type: "threadId", data: threadId }

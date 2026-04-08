@@ -58,12 +58,7 @@ export default function Intelligence() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages])
 
-  const invokeChatAPI = async (
-    userPrompt: string,
-    summarizeRequest: boolean,
-    entityType?: EntityType,
-    entityDetails?: string
-  ) => {
+  const invokeChatAPI = async (userPrompt: string) => {
     const latestThreadId = sessionStorage.getItem("thread_id")
     setMessages((prev) => [...prev, userPrompt ?? ""])
     setPrompt("")
@@ -77,9 +72,6 @@ export default function Intelligence() {
         {
           prompt: userPrompt,
           threadId: latestThreadId ?? undefined,
-          summarizeRequest,
-          entityType,
-          entityDetails,
         },
         (token) => {
           flushSync(() => {
@@ -168,7 +160,7 @@ export default function Intelligence() {
                     className="text-theme-300 bg-theme-800 hover:bg-theme-700 p-1 ps-4 pe-4 ms-2 mb-2 cursor-pointer"
                     onClick={(): void => {
                       setPrompt(item)
-                      invokeChatAPI(item, false)
+                      invokeChatAPI(item)
                     }}
                   >
                     {item}
@@ -267,7 +259,7 @@ export default function Intelligence() {
           <form
             onSubmit={(e) => {
               e.preventDefault()
-              invokeChatAPI(prompt, false)
+              invokeChatAPI(prompt)
             }}
           >
             <div className="w-full max-w-4xl mx-auto">
