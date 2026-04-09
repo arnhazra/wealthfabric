@@ -1,5 +1,4 @@
 import { ReactNode } from "react"
-import { uiConstants } from "@/shared/constants/global-constants"
 import { Quicksand } from "next/font/google"
 import Providers from "@/shared/providers"
 import NextTopLoader from "nextjs-toploader"

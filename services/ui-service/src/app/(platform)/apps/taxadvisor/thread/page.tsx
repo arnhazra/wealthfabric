@@ -6,7 +6,6 @@ import { Input } from "@/shared/components/ui/input"
 import { ScrollArea } from "@/shared/components/ui/scroll-area"
 import { Bot, User, ArrowUp, BadgePercent } from "lucide-react"
 import { endPoints } from "@/shared/constants/api-endpoints"
-import { uiConstants } from "@/shared/constants/global-constants"
 import MarkdownRenderer from "@/shared/components/markdown"
 import Show from "@/shared/components/show"
 import { Thread } from "@/shared/constants/types"
@@ -19,6 +18,7 @@ import IconContainer from "@/shared/components/icon-container"
 import { colorVars } from "@/shared/styles/color-vars"
 import { PLATFORM_NAME } from "@/shared/constants/config"
 import Loading from "@/app/loading"
+import { usePlatformConfig } from "@/context/platformconfig.provider"
 
 export default function Page() {
   const searchParams = useSearchParams()
@@ -26,6 +26,7 @@ export default function Page() {
   const tId = searchParams.get("threadId")
   const [threadId, setThreadId] = useState<string | null>(tId)
   const [prompt, setPrompt] = useState("")
+  const { platformConfig } = usePlatformConfig()
   const [messages, setMessages] = useState<string[]>([])
   const [isLoading, setLoading] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -115,7 +116,7 @@ export default function Page() {
                 </div>
                 <p className="text-primary">{PLATFORM_NAME} TaxAdvisor</p>
                 <p className="text-xs mt-2 text-theme-300 p-6">
-                  {uiConstants.aiSafetyStatement}
+                  {platformConfig?.otherConstants.aiSafetyStatement}
                 </p>
                 <p className="text-white text-lg sm:text-xl md:text-xl lg:text-2xl mt-4">
                   Let's calculate your taxes

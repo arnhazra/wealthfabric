@@ -8,7 +8,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/shared/components/ui/sheet"
-import { uiConstants } from "@/shared/constants/global-constants"
 import { cn } from "@/shared/lib/utils"
 import IconContainer from "../icon-container"
 import { PLATFORM_NAME } from "@/shared/constants/config"
@@ -57,7 +56,7 @@ export default function HomePageHeader() {
               })
             )}
           >
-            {uiConstants.getStartedButton}
+            {platformConfig?.otherConstants.getStartedButton}
           </Link>
         </nav>
 

@@ -13,7 +13,7 @@ import {
   BadgeMinus,
 } from "lucide-react"
 import { endPoints } from "@/shared/constants/api-endpoints"
-import { uiConstants } from "@/shared/constants/global-constants"
+import { usePlatformConfig } from "@/context/platformconfig.provider"
 import MarkdownRenderer from "../markdown"
 import Show from "../show"
 import { suggestedPrompts } from "./data"
@@ -28,6 +28,7 @@ import { colorVars } from "@/shared/styles/color-vars"
 import { PLATFORM_NAME } from "@/shared/constants/config"
 
 export default function Cowork() {
+  const { platformConfig } = usePlatformConfig()
   const [isOpen, setIsOpen] = useState(false)
   const [{ user }] = useUserContext()
   const [prompt, setPrompt] = useState("")
@@ -148,7 +149,7 @@ export default function Cowork() {
                 </div>
                 <p className="text-white">{PLATFORM_NAME} Cowork</p>
                 <p className="text-xs mt-2 text-theme-300 p-6">
-                  {uiConstants.aiSafetyStatement}
+                  {platformConfig?.otherConstants.aiSafetyStatement}
                 </p>
                 <p className="text-sm mt-2 text-theme-400 mb-4">
                   Try these actions

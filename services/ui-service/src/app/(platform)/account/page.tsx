@@ -3,7 +3,6 @@ import CopyToClipboard from "@/shared/components/copy"
 import SectionPanel from "../../../shared/components/section-panel"
 import { Button } from "@/shared/components/ui/button"
 import { endPoints } from "@/shared/constants/api-endpoints"
-import { uiConstants } from "@/shared/constants/global-constants"
 import { useUserContext } from "@/context/user.provider"
 import {
   UserIcon,
@@ -30,11 +29,13 @@ import { useConfirmContext } from "@/shared/providers/confirm.provider"
 import api from "@/shared/lib/ky-api"
 import type { User } from "@/shared/constants/types"
 import { PLATFORM_NAME } from "@/shared/constants/config"
+import { usePlatformConfig } from "@/context/platformconfig.provider"
 
 export default function Page() {
   const [{ user }, dispatch] = useUserContext()
   const { prompt } = usePromptContext()
   const { confirm } = useConfirmContext()
+  const { platformConfig } = usePlatformConfig()
 
   const editName = async () => {
     const { hasConfirmed, value } = await prompt(false, "Your Name", user.name)
@@ -49,7 +50,7 @@ export default function Page() {
           },
         })
       } catch (error) {
-        notify(uiConstants.genericError, "error")
+        notify(platformConfig?.otherConstants.genericError, "error")
       }
     }
   }
@@ -83,14 +84,14 @@ export default function Page() {
         },
       })
     } catch (error) {
-      notify(uiConstants.genericError, "error")
+      notify(platformConfig?.otherConstants.genericError, "error")
     }
   }
 
   const viewAIDataAgreement = async (from: string) => {
     const consent = await confirm({
       title: `${PLATFORM_NAME} Cowork Data Agreement`,
-      desc: uiConstants.useCoworkStatement,
+      desc: platformConfig?.otherConstants.useCoworkStatement ?? "",
     })
 
     if (from === "switch" && !consent) {

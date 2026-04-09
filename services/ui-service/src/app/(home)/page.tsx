@@ -1,6 +1,5 @@
 "use client"
 import { usePlatformConfig } from "@/context/platformconfig.provider"
-import { uiConstants } from "@/shared/constants/global-constants"
 import { BoxIcon, Lightbulb, ArrowRightCircle } from "lucide-react"
 import Link from "next/link"
 import { cn } from "@/shared/lib/utils"
@@ -14,7 +13,6 @@ import HomePageHeader from "@/shared/components/homepage-header"
 import { Badge } from "@/shared/components/ui/badge"
 import { FeatureCard } from "@/shared/components/feature-card"
 import { PricingCard } from "@/shared/components/pricing-card"
-import { PLATFORM_NAME } from "@/shared/constants/config"
 
 export default function Page() {
   const router = useRouter()
@@ -40,7 +38,7 @@ export default function Page() {
             })
           )}
         >
-          {uiConstants.getStartedButton}
+          {platformConfig?.otherConstants.getStartedButton}
           <ArrowRightCircle className="h-4 w-4" />
         </Link>
       </div>
@@ -123,8 +121,7 @@ export default function Page() {
         <div className="mx-auto max-w-[85rem] px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-between gap-4 py-10 md:h-24 md:flex-row md:py-0">
           <div className="flex flex-col items-center gap-4 md:flex-row md:gap-2">
             <p className="text-center text-sm leading-loose md:text-left">
-              © {new Date().getFullYear()} {PLATFORM_NAME}{" "}
-              {platformConfig?.copyrightText}
+              {platformConfig?.otherConstants.copyrightText ?? ""}
             </p>
           </div>
         </div>
