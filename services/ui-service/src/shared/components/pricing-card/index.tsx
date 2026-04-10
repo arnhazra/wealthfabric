@@ -21,7 +21,7 @@ export function PricingCard({ plan }: PricingCardProps) {
             <Icon className="h-6 w-6" />
           </IconContainer>
         </div>
-        <h2 className={`text-4xl font-medium ${fraunces.className}`}>
+        <h2 className={`text-3xl font-medium ${fraunces.className}`}>
           {plan.name}
         </h2>
         <p className="text-xl font-bold mt-4">
