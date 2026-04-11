@@ -35,7 +35,7 @@ export default function HomePageHeader() {
               <Link
                 key={index}
                 href={item.link}
-                className="text-sm font-medium text-white hover:text-primary mx-3"
+                className="text-sm font-bold text-theme-200 hover:text-primary mx-3"
                 target={item.external ? "_blank" : ""}
                 rel={item.external ? "noopener noreferrer" : ""}
               >
