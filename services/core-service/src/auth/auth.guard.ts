@@ -49,11 +49,11 @@ export class AuthGuard implements CanActivate {
       ).shift()
 
       let subscriptionTier = "Free"
-      if (!subscriptionResponse) subscriptionTier = "Free"
-      if (subscriptionResponse && !subscriptionResponse.isActive)
+      if (!subscriptionResponse || !subscriptionResponse.isActive) {
         subscriptionTier = "Free"
-      if (subscriptionResponse && subscriptionResponse.isActive)
+      } else {
         subscriptionTier = subscriptionResponse.subscriptionTier
+      }
 
       if (!userResponse || !userResponse.length) {
         throw new UnauthorizedException(statusMessages.invalidUser)

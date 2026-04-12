@@ -108,15 +108,15 @@ export class SubscriptionService {
         return null
       }
 
-      const { _id, price, endsAt } = subscription
+      const { endsAt } = subscription
       const isActive = subscription && new Date(endsAt) > new Date()
+      const subscriptionData =
+        typeof (subscription as any).toObject === "function"
+          ? (subscription as any).toObject()
+          : ((subscription as any)._doc ?? subscription)
 
       return {
-        _id,
-        userId,
-        price,
-        createdAt: (subscription as any).createdAt,
-        endsAt,
+        ...subscriptionData,
         isActive,
       }
     } catch (error) {
