@@ -46,7 +46,7 @@ export class CoworkService {
     const { prompt } = chatDto
     const threadId = chatDto.threadId ?? createOrConvertObjectId().toString()
     const thread = await this.getThreadById(threadId, !chatDto.threadId)
-
+    let fullResponse = ""
     const user: User = (
       await this.eventEmitter.emitAsync(AppEventMap.GetUserDetails, userId)
     ).shift()
@@ -57,10 +57,6 @@ export class CoworkService {
       user,
     }
 
-    yield { type: "threadId", data: threadId }
-
-    let fullResponse = ""
-
     for await (const token of this.chatStrategy.chatStream(args)) {
       fullResponse += token
       yield { type: "token", data: token }
@@ -69,5 +65,7 @@ export class CoworkService {
     await this.commandBus.execute<CreateThreadCommand, Thread>(
       new CreateThreadCommand(String(user._id), threadId, prompt, fullResponse)
     )
+
+    yield { type: "threadId", data: threadId }
   }
 }

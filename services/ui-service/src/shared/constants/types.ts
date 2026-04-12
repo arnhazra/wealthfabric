@@ -44,6 +44,20 @@ export interface User {
   createdAt: string
 }
 
+export interface Subscription {
+  _id: string
+  userId: string
+  price: number
+  createdAt: string
+  endsAt: string
+  isActive: boolean
+}
+
+export interface UserDetailsResponse {
+  user: User
+  subscription: Subscription | null
+}
+
 export interface Thread {
   _id: string
   threadId: string
@@ -115,45 +129,6 @@ export interface Goal {
   createdAt: string
 }
 
-export interface Valuation {
-  currentValuation?: number | null
-}
-
-export interface Widget {
-  icon: string
-  title: string
-  value: number
-  additionalInfo: string
-}
-
-export interface App {
-  appName: string
-  displayName: string
-  description: string
-  icon: string
-  url: string
-  enabled: boolean
-}
-
-export interface AppsConfig {
-  title: string
-  description: string
-  apps: App[]
-}
-
-export interface Solution {
-  displayName: string
-  description: string
-  icon: string
-  vector: string
-}
-
-export interface SolutionConfig {
-  title: string
-  desc: string
-  solutions: Solution[]
-}
-
 export interface TotalDebtDetails {
   remainingDebt: number
   totalEMI: number
@@ -221,4 +196,105 @@ export interface CalendarEvent {
   eventDate: string
   createdAt: string
   eventSource: string
+}
+
+export interface HeroConfig {
+  title: string
+  description: string
+  getStartedUrl: string
+}
+
+export interface App {
+  appName: string
+  displayName: string
+  description: string
+  icon: string
+  url: string
+  enabled: boolean
+}
+
+export interface AppConfig {
+  title: string
+  description: string
+  apps: App[]
+}
+
+export interface Feature {
+  displayName: string
+  description: string
+  icon: string
+}
+
+export interface FeatureConfig {
+  title: string
+  desc: string
+  features: Feature[]
+}
+
+export interface Widget {
+  icon: string
+  title: string
+  value: string
+  additionalInfo: string
+}
+
+export interface WidgetConfig {
+  title: string
+  desc: string
+  widgets: Widget[]
+}
+
+export interface Plan {
+  name: string
+  price: string
+  icon: string
+  features: string[]
+}
+
+export interface SubscriptionConfig {
+  title: string
+  desc: string
+  plans: Plan[]
+}
+
+export interface NavigationItem {
+  displayName: string
+  link: string
+  external?: boolean
+}
+
+export interface HomeNavigationConfig {
+  navigationItems: NavigationItem[]
+}
+
+export interface ServiceTier {
+  name: string
+  description: string
+}
+
+export interface ServiceTierConfig {
+  title: string
+  icon: string
+  description: string
+  contactUrl: string
+  contactText: string
+  tiers: ServiceTier[]
+}
+
+export interface ConstantConfig {
+  otherConstants: Record<string, string>
+}
+
+export interface HomeConfig {
+  homeNavigationConfig: HomeNavigationConfig
+  heroConfig: HeroConfig
+  featureConfig: FeatureConfig
+  appConfig: AppConfig
+  serviceTiersConfig: ServiceTierConfig
+  subscriptionConfig: SubscriptionConfig
+}
+
+export interface PlatformConfig extends HomeConfig {
+  otherConstants: Record<string, string>
+  widgetConfig: WidgetConfig
 }

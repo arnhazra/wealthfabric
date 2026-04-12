@@ -1,79 +1,82 @@
 "use client"
-import { endPoints } from "@/shared/constants/api-endpoints"
-import HTTPMethods from "@/shared/constants/http-methods"
-import { AppsConfig, SolutionConfig } from "@/shared/constants/types"
-import { uiConstants } from "@/shared/constants/global-constants"
-import {
-  BoxIcon,
-  Check,
-  Coins,
-  Lightbulb,
-  BookOpenIcon,
-  Code2,
-  ArrowRight,
-} from "lucide-react"
+import { usePlatformConfig } from "@/context/platformconfig.provider"
+import { ArrowRightCircle } from "lucide-react"
+import * as Icons from "lucide-react"
 import Link from "next/link"
 import { cn } from "@/shared/lib/utils"
-import { Button, buttonVariants } from "@/shared/components/ui/button"
+import { formatCurrency } from "@/shared/lib/format-currency"
+import { Currency } from "country-code-enum"
+import { buttonVariants, Button } from "@/shared/components/ui/button"
 import Loading from "../loading"
-import useQuery from "@/shared/hooks/use-query"
 import { AppCard } from "@/shared/components/app-card"
 import { useRouter } from "nextjs-toploader/app"
 import { useEffect, useState } from "react"
 import Cookies from "js-cookie"
 import HomePageHeader from "@/shared/components/homepage-header"
-import { Badge } from "@/shared/components/ui/badge"
-import { SolutionCard } from "@/shared/components/solution-card"
-import IconContainer from "@/shared/components/icon-container"
-import { PLATFORM_NAME } from "@/shared/constants/config"
+import { FeatureCard } from "@/shared/components/feature-card"
+import { PricingCard } from "@/shared/components/pricing-card"
+import WidgetCard from "@/shared/components/widget-card"
+import { ScrollReveal } from "@/shared/components/scroll-reveal"
 
 export default function Page() {
   const router = useRouter()
   const [checked, setChecked] = useState(false)
-
-  const apps = useQuery<AppsConfig>({
-    queryKey: ["app-config"],
-    queryUrl: `${endPoints.getConfig}/app-config`,
-    method: HTTPMethods.GET,
-  })
-
-  const solutions = useQuery<SolutionConfig>({
-    queryKey: ["solution-config"],
-    queryUrl: `${endPoints.getConfig}/solution-config`,
-    method: HTTPMethods.GET,
-  })
-
-  const openSourceConfig = useQuery<any>({
-    queryKey: ["open-source-config"],
-    queryUrl: `${endPoints.getConfig}/open-source-config`,
-    method: HTTPMethods.GET,
-  })
+  const { platformConfig } = usePlatformConfig()
 
   const renderHeroSection = (
     <section className="space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-28 hero-landing">
       <div className="mx-auto max-w-[85rem] px-4 sm:px-6 lg:px-8 text-left">
         <h1 className="text-white text-xl sm:text-4xl md:text-5xl lg:text-6xl tracking-tight mb-4 max-w-[40rem]">
-          {uiConstants.homeHeader}
+          {platformConfig?.heroConfig.title}
         </h1>
-        <p className="max-w-[35rem] leading-normal text-theme-100 sm:text-lg sm:leading-8">
-          {uiConstants.homeIntro}
-        </p>
-        <p className="max-w-[35rem] leading-normal text-primary sm:text-lg sm:leading-8 mb-6">
-          {uiConstants.openSourceIntro}
+        <p className="max-w-[35rem] leading-normal text-theme-100 sm:text-lg sm:leading-8 mb-4">
+          {platformConfig?.heroConfig.description}
         </p>
         <Link
-          href="/dashboard"
+          href={platformConfig?.heroConfig.getStartedUrl ?? ""}
           className={cn(
             buttonVariants({
               variant: "default",
               className:
-                "bg-primary hover:bg-primary text-black rounded-full h-11 w-40",
+                "bg-primary hover:bg-primary text-black rounded-2xl h-10 w-36",
             })
           )}
         >
-          {uiConstants.getStartedButton}
-          <ArrowRight className="ms-2 h-4 w-4" />
+          {platformConfig?.otherConstants.getStartedButton}
+          <ArrowRightCircle className="h-4 w-4" />
         </Link>
+      </div>
+    </section>
+  )
+
+  const renderFeaturesSection = (
+    <section
+      id="features"
+      className="mx-auto max-w-[85rem] px-4 sm:px-6 lg:px-8 space-y-6 py-8 md:py-12 lg:py-24 lg:rounded-3xl"
+    >
+      <div className="mx-auto flex w-full max-w-[68rem] flex-col items-start space-y-4 text-left">
+        <h1 className="font-semibold text-2xl sm:text-3xl md:text-4xl lg:text-5xl mb-6 tracking-wide">
+          {platformConfig?.featureConfig.title}
+        </h1>
+        <p className="max-w-[58rem] leading-normal sm:text-lg sm:leading-7">
+          {platformConfig?.featureConfig?.desc}
+        </p>
+      </div>
+      <div className="mx-auto grid w-full max-w-[68rem] justify-start gap-4 sm:grid-cols-1 md:max-w-[35rem] md:grid-cols-1 lg:max-w-[50rem] lg:grid-cols-2 xl:max-w-[68rem] xl:grid-cols-3">
+        {platformConfig?.featureConfig?.features?.map(
+          (feature: any, index: number) => (
+            <ScrollReveal
+              key={feature.displayName}
+              delay={index * 80}
+              className="h-full"
+            >
+              <FeatureCard
+                feature={feature}
+                ai={feature.displayName.includes("Cowork")}
+              />
+            </ScrollReveal>
+          )
+        )}
       </div>
     </section>
   )
@@ -81,97 +84,163 @@ export default function Page() {
   const renderAppsSection = (
     <section
       id="apps"
-      className="mx-auto max-w-[90rem] px-4 sm:px-6 lg:px-8 space-y-6 py-8 md:py-12 lg:py-24 lg:rounded-3xl"
+      className="mx-auto max-w-[85rem] px-4 sm:px-6 lg:px-8 space-y-6 py-8 md:py-12 lg:py-24"
     >
-      <div className="mx-auto flex max-w-[58rem] flex-col items-center space-y-4 text-center">
-        <Badge className="p-2 ps-4 pe-4 text-md bg-background text-primary border border-border rounded-full shadow-md shadow-primary/20">
-          <BoxIcon className="h-4 w-4 me-2" />
-          {apps?.data?.title}
-        </Badge>
-        <p className="max-w-[85%] leading-normal sm:text-lg sm:leading-7">
-          {apps?.data?.description}
+      <div className="mx-auto flex w-full max-w-[68rem] flex-col items-start space-y-4 text-left">
+        <h1 className="font-semibold text-2xl sm:text-3xl md:text-4xl lg:text-5xl mb-6 tracking-wide">
+          {platformConfig?.appConfig.title}
+        </h1>
+        <p className="max-w-[58rem] leading-normal sm:text-lg sm:leading-7">
+          {platformConfig?.appConfig?.description}
         </p>
       </div>
-      <div className="mx-auto grid justify-center gap-4 xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mb-4">
-        {apps?.data?.apps?.map((app) => (
-          <AppCard key={app.appName} app={app} />
+      <div className="mx-auto grid w-full max-w-[68rem] justify-start gap-4 sm:grid-cols-1 md:max-w-[35rem] md:grid-cols-1 lg:max-w-[50rem] lg:grid-cols-2 xl:max-w-[68rem] xl:grid-cols-3">
+        {platformConfig?.appConfig?.apps?.map((app, index: number) => (
+          <ScrollReveal key={app.appName} delay={index * 80} className="h-full">
+            <AppCard app={app} />
+          </ScrollReveal>
         ))}
       </div>
     </section>
   )
 
-  const renderSolutionsSection = (
-    <div className="bg-geometric-pattern">
-      <section
-        id="solutions"
-        className="mx-auto max-w-[85rem] px-4 sm:px-6 lg:px-8 space-y-6 py-8 md:py-12 lg:py-24 lg:rounded-3xl "
-      >
-        <div className="mx-auto flex max-w-[58rem] flex-col items-center space-y-4 text-center">
-          <Badge className="p-2 ps-4 pe-4 text-md bg-background text-primary border border-border rounded-full shadow-md shadow-primary/20">
-            <Lightbulb className="h-4 w-4 me-2" />
-            {solutions?.data?.title}
-          </Badge>
-          <p className="max-w-[85%] leading-normal sm:text-lg sm:leading-7">
-            {solutions?.data?.desc}
-          </p>
-        </div>
-        <div className="mx-auto grid justify-center gap-4 sm:grid-cols-1 md:max-w-[35rem] md:grid-cols-1 lg:max-w-[50rem] lg:grid-cols-2 xl:max-w-[68rem] xl:grid-cols-3">
-          {solutions?.data?.solutions?.map((solution) => (
-            <SolutionCard
-              key={solution.displayName}
-              solution={solution}
-              ai={solution.displayName.includes("Cowork")}
-            />
-          ))}
-        </div>
-      </section>
-    </div>
+  const resolveWidgetPlaceholders = () => {
+    const widgets = platformConfig?.widgetConfig?.widgets
+    if (!widgets) return []
+
+    const now = new Date()
+    const monthYear = now.toLocaleString("en-US", {
+      month: "long",
+      year: "numeric",
+    })
+
+    const assetValue = (Math.floor(Math.random() * 900) + 100) * 1_000_000
+    const expenseValue = (Math.floor(Math.random() * 9) + 1) * 1_00000
+    const goalAmount = (Math.floor(Math.random() * 500) + 10) * 1_000_0000
+    const remainingDebt = (Math.floor(Math.random() * 200) + 50) * 1_000
+    const totalEmi = (Math.floor(Math.random() * 5) + 1) * 1_000
+
+    const replacements: Record<string, string> = {
+      ASSET_VALUE: formatCurrency(assetValue, Currency.USD),
+      EXPENSE_VALUE: formatCurrency(expenseValue, Currency.USD),
+      GOAL_AMOUNT: formatCurrency(goalAmount, Currency.USD),
+      REMAINING_DEBT: formatCurrency(remainingDebt, Currency.USD),
+      TOTAL_EMI: formatCurrency(totalEmi, Currency.USD),
+      MONTH_YEAR: monthYear,
+      GOAL_PERCENTAGE: String(
+        assetValue / goalAmount > 1
+          ? 100
+          : Math.floor((assetValue / goalAmount) * 100)
+      ),
+    }
+
+    const json = JSON.stringify(widgets)
+    const resolved = json.replace(
+      /\{([A-Z_]+)\}/g,
+      (_, key) => replacements[key] ?? `{${key}}`
+    )
+    return JSON.parse(resolved)
+  }
+
+  const renderDynamicStatsSection = (
+    <section
+      id="dynamic-stats"
+      className="mx-auto max-w-[85rem] px-4 sm:px-6 lg:px-8 space-y-6 py-8 md:py-12 lg:py-24"
+    >
+      <div className="mx-auto flex w-full max-w-[68rem] flex-col items-start space-y-4 text-left">
+        <h1 className="font-semibold text-2xl sm:text-3xl md:text-4xl lg:text-5xl mb-6 tracking-wide">
+          {platformConfig?.widgetConfig?.title}
+        </h1>
+        <p className="max-w-[58rem] leading-normal sm:text-lg sm:leading-7">
+          {platformConfig?.widgetConfig?.desc}
+        </p>
+      </div>
+      <div className="mx-auto grid w-full max-w-[68rem] justify-start gap-4 sm:grid-cols-1 md:max-w-[35rem] md:grid-cols-1 lg:max-w-[50rem] lg:grid-cols-2 xl:max-w-[68rem] xl:grid-cols-4">
+        {resolveWidgetPlaceholders().map((widget: any, index: number) => (
+          <ScrollReveal key={widget.icon} delay={index * 80} className="h-full">
+            <WidgetCard widget={widget} scramble />
+          </ScrollReveal>
+        ))}
+      </div>
+    </section>
   )
 
-  const renderOpenSourceSection = (
-    <section id="opensource" className="py-8 md:py-12 lg:py-24">
-      <div className="mx-auto max-w-[50rem] px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto flex max-w-[64rem] flex-col items-center justify-center text-center mb-8">
-          <Badge className="mb-4 p-2 ps-4 pe-4 text-md bg-background text-primary border border-border rounded-full shadow-md shadow-primary/20">
-            <Coins className="h-4 w-4 me-2" />
-            {openSourceConfig.data?.title}
-          </Badge>
+  const renderServiceTiersSection = () => {
+    const config = platformConfig?.serviceTiersConfig
+    const TierIcon = (Icons as any)[config?.icon ?? "Shapes"] ?? Icons.Shapes
 
-          <p className="max-w-[85%] leading-normal sm:text-lg sm:leading-7 mb-2">
-            {openSourceConfig.data?.desc}
+    return (
+      <section id="service-tiers" className="py-8 md:py-12">
+        <div className="mx-auto max-w-[85rem] px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto grid w-full max-w-[68rem] gap-10 rounded-[2rem] bg-background border border-border px-6 py-8 sm:px-10 sm:py-10 lg:grid-cols-[1.05fr_1fr] lg:px-12 lg:py-12">
+            <div className="flex flex-col items-start justify-between">
+              <div>
+                <TierIcon
+                  className="mb-8 h-12 w-12 text-theme-100"
+                  strokeWidth={1.5}
+                />
+                <h2 className="mb-4 text-4xl font-semibold tracking-tight text-theme-100 sm:text-5xl">
+                  {config?.title}
+                </h2>
+                <p className="max-w-[32rem] text-lg leading-8 text-theme-300">
+                  {config?.description}
+                </p>
+              </div>
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Button
+                  variant="default"
+                  className="rounded-2xl bg-theme-100 px-6 text-black hover:bg-theme-200"
+                  asChild
+                >
+                  <Link href={config?.contactUrl ?? ""}>
+                    {config?.contactText}
+                  </Link>
+                </Button>
+              </div>
+            </div>
+
+            <div className="flex flex-col justify-center space-y-8 lg:pl-6">
+              {config?.tiers?.map((tier) => (
+                <div key={tier.name}>
+                  <h3 className="text-2xl font-semibold text-theme-100">
+                    {tier.name}
+                  </h3>
+                  <p className="mt-2 text-lg leading-8 text-theme-400">
+                    {tier.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  const renderSubscriptionSection = (
+    <section id="pricing" className="py-8 md:py-12 lg:py-24">
+      <div className="mx-auto max-w-[85rem] px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex w-full max-w-[68rem] flex-col items-start justify-center text-left mb-8">
+          <h1 className="font-semibold text-2xl sm:text-3xl md:text-4xl lg:text-5xl mb-6 tracking-wide">
+            {platformConfig?.subscriptionConfig?.title}
+          </h1>
+          <p className="max-w-[58rem] leading-normal sm:text-lg sm:leading-7 mb-2">
+            {platformConfig?.subscriptionConfig?.desc}
           </p>
         </div>
-        <div className="bg-background border border-border p-8 rounded-3xl flex flex-col hover:shadow-lg hover:shadow-primary/20">
-          <div className="flex justify-between items-center mb-12">
-            <div>
-              <p className="text-xl">{PLATFORM_NAME}</p>
-              <h2 className="text-2xl">{openSourceConfig.data?.title}</h2>
-            </div>
-            <IconContainer>
-              <BookOpenIcon className="h-4 w-4" />
-            </IconContainer>
-          </div>
-          <p className="text-sm leading-relaxed mt-auto">
-            {openSourceConfig.data?.features.map((feature: string) => {
-              return (
-                <li className="flex items-center mb-2" key={feature}>
-                  <Check className="mr-2 h-4 w-4" /> {feature}
-                </li>
-              )
-            })}
-          </p>
-          <div className="mt-8 flex justify-end">
-            <Button variant="default" className="text-black" asChild>
-              <a
-                href={`https://github.com/arnhazra/${PLATFORM_NAME.toLowerCase()}`}
-                target="_blank"
-                rel="noopener noreferrer"
+        <div className="mx-auto grid w-full max-w-[68rem] justify-start gap-4 sm:grid-cols-1 md:max-w-[35rem] md:grid-cols-1 lg:max-w-[50rem] lg:grid-cols-2 xl:max-w-[68rem] xl:grid-cols-3">
+          {platformConfig?.subscriptionConfig?.plans?.map(
+            (plan, index: number) => (
+              <ScrollReveal
+                key={plan.name}
+                delay={index * 80}
+                className="h-full"
               >
-                View Source Code
-                <Code2 />
-              </a>
-            </Button>
-          </div>
+                <PricingCard plan={plan} />
+              </ScrollReveal>
+            )
+          )}
         </div>
       </div>
     </section>
@@ -183,8 +252,7 @@ export default function Page() {
         <div className="mx-auto max-w-[85rem] px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-between gap-4 py-10 md:h-24 md:flex-row md:py-0">
           <div className="flex flex-col items-center gap-4 md:flex-row md:gap-2">
             <p className="text-center text-sm leading-loose md:text-left">
-              © {new Date().getFullYear()} {PLATFORM_NAME}{" "}
-              {uiConstants.copyrightText}
+              {platformConfig?.otherConstants.copyrightText ?? ""}
             </p>
           </div>
         </div>
@@ -208,9 +276,12 @@ export default function Page() {
       <div className="min-h-screen w-full text-white">
         <HomePageHeader />
         {renderHeroSection}
+        {renderFeaturesSection}
         {renderAppsSection}
-        {renderSolutionsSection}
-        {renderOpenSourceSection}
+        {renderDynamicStatsSection}
+
+        {renderSubscriptionSection}
+        {renderServiceTiersSection()}
       </div>
       {renderFooterSection}
     </>

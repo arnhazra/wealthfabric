@@ -41,7 +41,7 @@ import { formatDate } from "@/shared/lib/date-formatter"
 import { ResourceDetails } from "../resource-details"
 import { ResourceTypeForDetailModal } from "../resource-details/data"
 import { createResourceUrlMap, ResourceTypeMap, ResourceType } from "./data"
-import { uiConstants } from "@/shared/constants/global-constants"
+import { usePlatformConfig } from "@/context/platformconfig.provider"
 import { useRouter } from "nextjs-toploader/app"
 import MaskText from "../mask"
 
@@ -66,6 +66,7 @@ export function ResourceCard<T extends keyof ResourceTypeMap>({
 }: ResourceCardProps<T>) {
   const [{ user }] = useUserContext()
   const router = useRouter()
+  const { platformConfig } = usePlatformConfig()
   const [articleImageError, setArticleImageError] = useState(false)
   const [resourceDescription, setResourceDescription] = useState<string | null>(
     null
@@ -230,7 +231,7 @@ export function ResourceCard<T extends keyof ResourceTypeMap>({
             condition={!!(resource as Article).urlToImage && !articleImageError}
             fallback={
               <img
-                src={uiConstants.newsFallbackImageUrl}
+                src={platformConfig?.otherConstants.newsFallbackImageUrl}
                 alt="News image"
                 className="object-cover w-full h-full transition-transform duration-300 hover:scale-105 rounded-t-3xl"
               />
@@ -239,7 +240,7 @@ export function ResourceCard<T extends keyof ResourceTypeMap>({
             <img
               src={
                 (resource as Article).urlToImage ??
-                uiConstants.newsFallbackImageUrl
+                platformConfig?.otherConstants.newsFallbackImageUrl
               }
               alt={(resource as Article).title || "News image"}
               className="object-cover w-full h-full transition-transform duration-300 hover:scale-105 rounded-t-3xl"
