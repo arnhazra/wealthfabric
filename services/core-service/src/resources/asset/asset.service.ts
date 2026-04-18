@@ -16,6 +16,8 @@ import calculateComplexValuation from "./lib/calculate-complex-valuation"
 import calculateRecurringValuation from "./lib/calculate-recurring-valuation"
 import { isMatured, isMaturityApproaching } from "./lib/maturity-calculator"
 import { FindAssetsByTypesQuery } from "./queries/impl/find-assets-by-types.query"
+import calculateSimpleValuation from "./lib/calculate-simple-valuation"
+import calculateUnitValuation from "./lib/calculate-unit-valuation"
 
 @Injectable()
 export class AssetService {
@@ -162,10 +164,11 @@ export class AssetService {
       const unitValuationAssets = [AssetType.EQUITY, AssetType.CRYPTO]
 
       if (simpleValuationAssets.includes(asset.assetType)) {
-        return asset.currentValuation
+        return calculateSimpleValuation(asset.currentValuation)
       }
 
       if (complexValuationAssets.includes(asset.assetType)) {
+        ;``
         return calculateComplexValuation({
           amountInvested: asset.amountInvested,
           startDate: asset.startDate,
@@ -185,7 +188,7 @@ export class AssetService {
       }
 
       if (unitValuationAssets.includes(asset.assetType)) {
-        return asset.units * asset.unitPurchasePrice
+        return calculateUnitValuation(asset.units, asset.unitPurchasePrice)
       }
 
       return 0
