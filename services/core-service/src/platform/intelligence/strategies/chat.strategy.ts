@@ -1,18 +1,27 @@
 import { Injectable } from "@nestjs/common"
-import { Thread } from "../schemas/thread.schema"
-import { config } from "@/config"
+import {
+  BaseLanguageModelInput,
+  LanguageModelOutput,
+} from "@langchain/core/language_models/base"
+import { RunnableInterface } from "@langchain/core/runnables"
 import { createAgent, SystemMessage, HumanMessage, AIMessage } from "langchain"
+import { config } from "@/config"
+import { Thread } from "../schemas/thread.schema"
 import { User } from "@/auth/schemas/user.schema"
-import { GoalAgent } from "../agents/goal/goal.agent"
-import { AssetGroupAgent } from "../agents/assetgroup/assetgroup.agent"
-import { AssetAgent } from "../agents/asset/asset.agent"
-import { DebtAgent } from "../agents/debt/debt.agent"
-import { ExpenseAgent } from "../agents/expense/expense.agent"
+import { DebtAgent } from "@/resources/debt/debt.agent"
+import { GoalAgent } from "@/resources/goal/goal.agent"
+import { AssetGroupAgent } from "@/resources/assetgroup/assetgroup.agent"
+import { AssetAgent } from "@/resources/asset/asset.agent"
+import { ExpenseAgent } from "@/resources/expense/expense.agent"
 import { LLMService } from "@/shared/llm/llm.service"
-import { CashflowAgent } from "../agents/cashflow/cashflow.agent"
+import { CashflowAgent } from "@/resources/cashflow/cashflow.agent"
 import { ConfigService } from "@/platform/config/config.service"
-import { EventAgent } from "../agents/event/event.agent"
-import { AgentLanguageModelLike } from "langchain/dist/agents/model.cjs"
+import { EventAgent } from "@/resources/event/event.agent"
+
+type AgentLanguageModelLike = RunnableInterface<
+  BaseLanguageModelInput,
+  LanguageModelOutput
+>
 
 export interface ChatArgs {
   thread: Thread[]
@@ -52,8 +61,8 @@ export class ChatStrategy {
       model: llm,
       tools: [
         this.assetgroupAgent.createAssetGroupTool,
-        this.assetgroupAgent.getAssetGroupValuationTool,
         this.assetgroupAgent.getAssetGroupListTool,
+        this.assetgroupAgent.getAssetGroupValuationTool,
         this.assetAgent.getAssetTypesTool,
         this.assetAgent.getTotalAssetTool,
         this.assetAgent.getAssetListTool,

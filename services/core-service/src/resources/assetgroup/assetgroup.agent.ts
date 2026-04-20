@@ -1,17 +1,17 @@
 import { AppEventMap } from "@/shared/constants/app-events.map"
 import { tool } from "langchain"
 import { Injectable } from "@nestjs/common"
-import { EventEmitter2 } from "@nestjs/event-emitter"
 import { AssetGroup } from "@/resources/assetgroup/schemas/assetgroup.schema"
 import {
   CreateAssetGroupSchema,
   GetAssetGroupListSchema,
   GetAssetGroupValuationSchema,
-} from "./assetgroup.schema"
+} from "../../platform/intelligence/agents/assetgroup/assetgroup.schema"
+import { AssetGroupService } from "./assetgroup.service"
 
 @Injectable()
 export class AssetGroupAgent {
-  constructor(private readonly eventEmitter: EventEmitter2) {}
+  constructor(private readonly service: AssetGroupService) {}
 
   public createAssetGroupTool = tool(
     async ({
@@ -22,13 +22,9 @@ export class AssetGroupAgent {
       assetgroupName: string
     }) => {
       try {
-        await this.eventEmitter.emitAsync(
-          AppEventMap.CreateAssetGroup,
-          userId,
-          {
-            assetgroupName,
-          }
-        )
+        await this.service.createAssetGroup(userId, {
+          assetgroupName,
+        })
         return "AssetGroup created successfully"
       } catch (error) {
         return "Failed to create the assetgroup"
@@ -50,12 +46,10 @@ export class AssetGroupAgent {
       searchKeyword: string
     }) => {
       try {
-        const assetgroups: AssetGroup[] = await this.eventEmitter.emitAsync(
-          AppEventMap.GetAssetGroupList,
+        const assetgroups: AssetGroup[] = await this.service.findMyAssetGroups(
           userId,
           searchKeyword
         )
-
         return JSON.stringify(assetgroups)
       } catch (error) {
         return "Unable to get the assetgroup list"
@@ -78,11 +72,7 @@ export class AssetGroupAgent {
     }) => {
       try {
         const assetgroup: any = (
-          await this.eventEmitter.emitAsync(
-            AppEventMap.GetAssetGroupList,
-            userId,
-            assetgroupName
-          )
+          await this.service.findMyAssetGroups(userId, assetgroupName)
         ).shift()
         const valuation = assetgroup.currentValuation ?? 0
         return `Valuation is ${valuation}`

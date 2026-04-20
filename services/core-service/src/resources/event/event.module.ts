@@ -1,6 +1,5 @@
 import { Module } from "@nestjs/common"
 import { EntityModule } from "@/shared/entity/entity.module"
-import { config } from "@/config"
 import { DbConnectionMap } from "@/shared/entity/entity-db-connection.map"
 import { CqrsModule } from "@nestjs/cqrs"
 import { EventService } from "./event.service"
@@ -12,9 +11,12 @@ import { DeleteEventCommandHandler } from "./commands/handler/delete-event.handl
 import { FindEventsByUserQueryHandler } from "./queries/handler/find-event-by-user.handler"
 import { FindEventByIdQueryHandler } from "./queries/handler/find-event-by-id.handler"
 import { UpdateEventByIdCommandHandler } from "./commands/handler/update-event.handler"
+import { AuthModule } from "@/auth/auth.module"
+import { EventAgent } from "./event.agent"
 
 @Module({
   imports: [
+    AuthModule,
     CqrsModule,
     EntityModule.forFeature(
       [{ name: Event.name, schema: EventSchema }],
@@ -23,6 +25,7 @@ import { UpdateEventByIdCommandHandler } from "./commands/handler/update-event.h
   ],
   controllers: [EventController],
   providers: [
+    EventAgent,
     EventService,
     EventRepository,
     CreateEventCommandHandler,
@@ -31,5 +34,6 @@ import { UpdateEventByIdCommandHandler } from "./commands/handler/update-event.h
     FindEventByIdQueryHandler,
     UpdateEventByIdCommandHandler,
   ],
+  exports: [EventAgent],
 })
 export class EventModule {}

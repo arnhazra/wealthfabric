@@ -1,14 +1,15 @@
 import { ExpenseCategory } from "@/shared/constants/types"
-import { AppEventMap } from "@/shared/constants/app-events.map"
 import { tool } from "langchain"
 import { Injectable } from "@nestjs/common"
-import { EventEmitter2 } from "@nestjs/event-emitter"
-import { Expense } from "@/resources/expense/schemas/expense.schema"
-import { CreateExpenseSchema, GetExpenseByMonthSchema } from "./expense.schema"
+import {
+  CreateExpenseSchema,
+  GetExpenseByMonthSchema,
+} from "../../platform/intelligence/agents/expense/expense.schema"
+import { ExpenseService } from "./expense.service"
 
 @Injectable()
 export class ExpenseAgent {
-  constructor(private readonly eventEmitter: EventEmitter2) {}
+  constructor(private readonly service: ExpenseService) {}
 
   public getExpenseByMonthTool = tool(
     async ({
@@ -19,12 +20,7 @@ export class ExpenseAgent {
       expenseMonth: string
     }) => {
       try {
-        const expenses: Expense[] = await this.eventEmitter.emitAsync(
-          AppEventMap.GetExpenseByMonth,
-          userId,
-          expenseMonth
-        )
-
+        const expenses = await this.service.findMyExpenses(userId, expenseMonth)
         return JSON.stringify(expenses)
       } catch (error) {
         return "Unable to get the expense list"
@@ -52,7 +48,7 @@ export class ExpenseAgent {
       expenseDate: string
     }) => {
       try {
-        await this.eventEmitter.emitAsync(AppEventMap.CreateExpense, userId, {
+        await this.service.createExpense(userId, {
           title,
           expenseAmount,
           expenseCategory,

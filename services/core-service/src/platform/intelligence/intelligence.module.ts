@@ -9,20 +9,28 @@ import { IntelligenceRepository } from "./intelligence.repository"
 import { EntityModule } from "@/shared/entity/entity.module"
 import { FetchThreadByIdQueryHandler } from "./queries/handler/fetch-thread-by-id.handler"
 import { HttpModule } from "@nestjs/axios"
-import { config } from "@/config"
 import { ChatStrategy } from "./strategies/chat.strategy"
-import { AssetGroupAgent } from "./agents/assetgroup/assetgroup.agent"
-import { AssetAgent } from "./agents/asset/asset.agent"
-import { GoalAgent } from "./agents/goal/goal.agent"
-import { DebtAgent } from "./agents/debt/debt.agent"
-import { ExpenseAgent } from "./agents/expense/expense.agent"
-import { CashflowAgent } from "./agents/cashflow/cashflow.agent"
-import { EventAgent } from "./agents/event/event.agent"
+import { AuthModule } from "@/auth/auth.module"
+import { AssetModule } from "@/resources/asset/asset.module"
+import { AssetGroupModule } from "@/resources/assetgroup/assetgroup.module"
+import { CashFlowModule } from "@/resources/cashflow/cashflow.module"
+import { DebtModule } from "@/resources/debt/debt.module"
+import { GoalModule } from "@/resources/goal/goal.module"
+import { EventModule } from "@/resources/event/event.module"
+import { ExpenseModule } from "@/resources/expense/expense.module"
 
 @Module({
   imports: [
     HttpModule,
     CqrsModule,
+    AuthModule,
+    AssetModule,
+    AssetGroupModule,
+    CashFlowModule,
+    DebtModule,
+    GoalModule,
+    EventModule,
+    ExpenseModule,
     EntityModule.forFeature(
       [{ name: Thread.name, schema: ThreadSchema }],
       DbConnectionMap.Platform
@@ -33,13 +41,6 @@ import { EventAgent } from "./agents/event/event.agent"
     IntelligenceService,
     IntelligenceRepository,
     ChatStrategy,
-    AssetGroupAgent,
-    AssetAgent,
-    GoalAgent,
-    DebtAgent,
-    ExpenseAgent,
-    CashflowAgent,
-    EventAgent,
     CreateThreadCommandHandler,
     FetchThreadByIdQueryHandler,
   ],

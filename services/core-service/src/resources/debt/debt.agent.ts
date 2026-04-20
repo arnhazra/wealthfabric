@@ -1,17 +1,15 @@
-import { AppEventMap } from "@/shared/constants/app-events.map"
 import { tool } from "langchain"
 import { Injectable } from "@nestjs/common"
-import { EventEmitter2 } from "@nestjs/event-emitter"
-import { Debt } from "@/resources/debt/schemas/debt.schema"
 import {
   CreateDebtSchema,
   GetByUserIdSchema,
   GetDebtListSchema,
-} from "./debt.schema"
+} from "../../platform/intelligence/agents/debt/debt.schema"
+import { DebtService } from "./debt.service"
 
 @Injectable()
 export class DebtAgent {
-  constructor(private readonly eventEmitter: EventEmitter2) {}
+  constructor(private readonly service: DebtService) {}
 
   public createDebtTool = tool(
     async ({
@@ -32,14 +30,15 @@ export class DebtAgent {
       interestRate: number
     }) => {
       try {
-        await this.eventEmitter.emitAsync(AppEventMap.CreateDebt, userId, {
+        const debtRequest = {
           debtPurpose,
           identifier,
           startDate,
           endDate,
           principalAmount,
           interestRate,
-        })
+        }
+        await this.service.createDebt(userId, debtRequest)
         return "Debt created successfully"
       } catch (error) {
         return "Failed to create the debt"
@@ -61,12 +60,7 @@ export class DebtAgent {
       searchKeyword: string
     }) => {
       try {
-        const debts: Debt[] = await this.eventEmitter.emitAsync(
-          AppEventMap.GetDebtList,
-          userId,
-          searchKeyword
-        )
-
+        const debts = await this.service.findMyDebts(userId, searchKeyword)
         return JSON.stringify(debts)
       } catch (error) {
         return "Unable to get the debt list"
@@ -82,9 +76,7 @@ export class DebtAgent {
   public getTotalDebtTool = tool(
     async ({ userId }: { userId: string }) => {
       try {
-        const valuation = (
-          await this.eventEmitter.emitAsync(AppEventMap.GetTotalDebt, userId)
-        ).shift()
+        const valuation = await this.service.calculateTotalDebt(userId)
         return `Total debt details is ${JSON.stringify(valuation)}`
       } catch (error) {
         return "Unable to get total debt"

@@ -19,7 +19,6 @@ export class GoalService {
     private readonly commandBus: CommandBus
   ) {}
 
-  @OnEvent(AppEventMap.CreateGoal)
   async createGoal(userId: string, requestBody: CreateGoalRequestDto) {
     try {
       return await this.commandBus.execute<CreateGoalCommand, Goal>(
@@ -30,7 +29,6 @@ export class GoalService {
     }
   }
 
-  @OnEvent(AppEventMap.GetGoalList)
   async findMyGoals(userId: string) {
     try {
       return await this.queryBus.execute<FindGoalsByUserQuery, Goal[]>(

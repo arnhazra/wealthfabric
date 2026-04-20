@@ -32,7 +32,6 @@ export class CashFlowService {
     }
   }
 
-  @OnEvent(AppEventMap.FindCashFlowsByUserId)
   async findMyCashflows(userId: string, searchKeyword?: string) {
     try {
       return await this.queryBus.execute<FindCashflowsByUserQuery, Cashflow[]>(

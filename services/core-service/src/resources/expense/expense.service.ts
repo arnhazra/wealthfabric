@@ -19,7 +19,6 @@ export class ExpenseService {
     private readonly commandBus: CommandBus
   ) {}
 
-  @OnEvent(AppEventMap.CreateExpense)
   async createExpense(userId: string, requestBody: CreateExpenseRequestDto) {
     try {
       return await this.commandBus.execute<CreateExpenseCommand, Expense>(

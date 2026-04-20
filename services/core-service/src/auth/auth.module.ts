@@ -48,5 +48,6 @@ import { FindUserByIdQueryHandler } from "./queries/handler/find-user-by-id.hand
     FindUserByEmailQueryHandler,
     FindUserByIdQueryHandler,
   ],
+  exports: [AuthService],
 })
 export class AuthModule {}

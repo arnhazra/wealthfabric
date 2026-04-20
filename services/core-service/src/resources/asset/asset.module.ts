@@ -13,6 +13,7 @@ import { UpdateAssetCommandHandler } from "./commands/handler/update-asset.handl
 import { FindAssetsByUserQueryHandler } from "./queries/handler/find-assets-by-user.handler"
 import { FindAssetsByAssetGroupQueryHandler } from "./queries/handler/find-assets-by-assetgroup.handler"
 import { FindAssetsByTypesQueryHandler } from "./queries/handler/find-assets-by-types.handler"
+import { AssetAgent } from "./asset.agent"
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { FindAssetsByTypesQueryHandler } from "./queries/handler/find-assets-by-
   ],
   controllers: [AssetController],
   providers: [
+    AssetAgent,
     AssetService,
     AssetRepository,
     CreateAssetCommandHandler,
@@ -34,6 +36,6 @@ import { FindAssetsByTypesQueryHandler } from "./queries/handler/find-assets-by-
     FindAssetByIdQueryHandler,
     FindAssetsByTypesQueryHandler,
   ],
-  exports: [AssetService],
+  exports: [AssetAgent, AssetService],
 })
 export class AssetModule {}

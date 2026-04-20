@@ -20,7 +20,6 @@ export class AssetGroupService {
     private readonly assetService: AssetService
   ) {}
 
-  @OnEvent(AppEventMap.CreateAssetGroup)
   async createAssetGroup(
     userId: string,
     requestBody: CreateAssetGroupRequestDto
@@ -34,7 +33,6 @@ export class AssetGroupService {
     }
   }
 
-  @OnEvent(AppEventMap.GetAssetGroupList)
   async findMyAssetGroups(userId: string, searchKeyword?: string) {
     const assetgroups = await this.queryBus.execute<
       FindAllAssetGroupQuery,

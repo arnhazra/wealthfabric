@@ -12,6 +12,7 @@ import { FindAssetGroupByIdQueryHandler } from "./queries/handler/find-assetgrou
 import { EntityModule } from "@/shared/entity/entity.module"
 import { UpdateAssetGroupCommandHandler } from "./commands/handler/update-assetgroup.handler"
 import { AssetModule } from "../asset/asset.module"
+import { AssetGroupAgent } from "./assetgroup.agent"
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { AssetModule } from "../asset/asset.module"
   ],
   controllers: [AssetGroupController],
   providers: [
+    AssetGroupAgent,
     AssetGroupService,
     AssetGroupRepository,
     CreateAssetGroupCommandHandler,
@@ -32,5 +34,6 @@ import { AssetModule } from "../asset/asset.module"
     FindAllAssetGroupQueryHandler,
     FindAssetGroupByIdQueryHandler,
   ],
+  exports: [AssetGroupAgent],
 })
 export class AssetGroupModule {}

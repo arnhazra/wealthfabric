@@ -1,13 +1,14 @@
-import { AppEventMap } from "@/shared/constants/app-events.map"
 import { tool } from "langchain"
 import { Injectable } from "@nestjs/common"
-import { EventEmitter2 } from "@nestjs/event-emitter"
-import { Goal } from "@/resources/goal/schemas/goal.schema"
-import { CreateGoalSchema, GetByUserIdSchema } from "./goal.schema"
+import {
+  CreateGoalSchema,
+  GetByUserIdSchema,
+} from "../../platform/intelligence/agents/goal/goal.schema"
+import { GoalService } from "./goal.service"
 
 @Injectable()
 export class GoalAgent {
-  constructor(private readonly eventEmitter: EventEmitter2) {}
+  constructor(private readonly service: GoalService) {}
 
   public createGoalTool = tool(
     async ({
@@ -20,7 +21,7 @@ export class GoalAgent {
       goalAmount: number
     }) => {
       try {
-        await this.eventEmitter.emitAsync(AppEventMap.CreateGoal, userId, {
+        await this.service.createGoal(userId, {
           goalDate,
           goalAmount,
         })
@@ -39,11 +40,7 @@ export class GoalAgent {
   public getGoalListTool = tool(
     async ({ userId }: { userId: string }) => {
       try {
-        const goals: Goal[] = await this.eventEmitter.emitAsync(
-          AppEventMap.GetGoalList,
-          userId
-        )
-
+        const goals = await this.service.findMyGoals(userId)
         return JSON.stringify(goals)
       } catch (error) {
         return "Unable to get the goal list"
@@ -59,10 +56,7 @@ export class GoalAgent {
   public getNearestGoalTool = tool(
     async ({ userId }: { userId: string }) => {
       try {
-        const goal: Goal = (
-          await this.eventEmitter.emitAsync(AppEventMap.GetNearestGoal, userId)
-        ).shift()
-
+        const goal = await this.service.findNearestGoal(userId)
         return JSON.stringify(goal)
       } catch (error) {
         return "Unable to get the goal list"

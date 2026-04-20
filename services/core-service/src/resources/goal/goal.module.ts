@@ -12,6 +12,7 @@ import { EntityModule } from "@/shared/entity/entity.module"
 import { UpdateGoalCommandHandler } from "./commands/handler/update-goal.handler"
 import { FindGoalsByUserQueryHandler } from "./queries/handler/find-goal-by-user.handler"
 import { FindNearestGoalQueryHandler } from "./queries/handler/find-nearest-goal.handler"
+import { GoalAgent } from "./goal.agent"
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { FindNearestGoalQueryHandler } from "./queries/handler/find-nearest-goal
   ],
   controllers: [GoalController],
   providers: [
+    GoalAgent,
     GoalService,
     GoalRepository,
     CreateGoalCommandHandler,
@@ -32,5 +34,6 @@ import { FindNearestGoalQueryHandler } from "./queries/handler/find-nearest-goal
     FindGoalByIdQueryHandler,
     FindNearestGoalQueryHandler,
   ],
+  exports: [GoalAgent],
 })
 export class GoalModule {}

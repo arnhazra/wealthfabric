@@ -74,7 +74,6 @@ export class AssetService {
     }
   }
 
-  @OnEvent(AppEventMap.GetAssetList)
   async findAllMyAssets(userId: string) {
     try {
       const assets = await this.queryBus.execute<
@@ -99,7 +98,6 @@ export class AssetService {
     }
   }
 
-  @OnEvent(AppEventMap.FindAssetById)
   async findAssetById(reqUserId: string, assetId: string) {
     try {
       const asset = await this.queryBus.execute<FindAssetByIdQuery, Asset>(
@@ -119,7 +117,6 @@ export class AssetService {
     }
   }
 
-  @OnEvent(AppEventMap.UpdateAssetById)
   async updateAssetById(
     userId: string,
     assetId: string,

@@ -1,16 +1,17 @@
-import { User } from "@/auth/schemas/user.schema"
 import { AppEventMap } from "@/shared/constants/app-events.map"
 import { Injectable } from "@nestjs/common"
 import { EventEmitter2 } from "@nestjs/event-emitter"
 import { formatCurrency } from "./lib/format-currency"
 import { format } from "date-fns"
 import { ConfigService } from "../config/config.service"
+import { AuthService } from "@/auth/auth.service"
 
 @Injectable()
 export class WidgetService {
   constructor(
     private readonly eventEmitter: EventEmitter2,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private readonly authService: AuthService
   ) {}
 
   async getWidgets(userId: string) {
@@ -28,9 +29,7 @@ export class WidgetService {
         await this.eventEmitter.emitAsync(AppEventMap.GetExpenseByMonth, userId)
       ).shift()
 
-      const user: User = (
-        await this.eventEmitter.emitAsync(AppEventMap.GetUserDetails, userId)
-      ).shift()
+      const user = await this.authService.findUserById(userId)
 
       const goalPercentage =
         ((assetData ?? 0) * 100) / (goalData ? goalData?.goalAmount : 0) || 0

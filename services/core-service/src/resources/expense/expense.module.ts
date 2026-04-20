@@ -1,6 +1,5 @@
 import { Module } from "@nestjs/common"
 import { EntityModule } from "@/shared/entity/entity.module"
-import { config } from "@/config"
 import { DbConnectionMap } from "@/shared/entity/entity-db-connection.map"
 import { ExpenseService } from "./expense.service"
 import { ExpenseController } from "./expense.controller"
@@ -12,6 +11,7 @@ import { DeleteExpenseCommandHandler } from "./commands/handler/delete-expense.h
 import { FindExpenseByIdQueryHandler } from "./queries/handler/find-expense-by-id.handler"
 import { UpdateExpenseCommandHandler } from "./commands/handler/update-expense.handler"
 import { FindExpensesByUserQueryHandler } from "./queries/handler/find-expense-by-user.handler"
+import { ExpenseAgent } from "./expense.agent"
 
 @Module({
   imports: [
@@ -23,6 +23,7 @@ import { FindExpensesByUserQueryHandler } from "./queries/handler/find-expense-b
   ],
   controllers: [ExpenseController],
   providers: [
+    ExpenseAgent,
     ExpenseService,
     ExpenseRepository,
     CreateExpenseCommandHandler,
@@ -31,5 +32,6 @@ import { FindExpensesByUserQueryHandler } from "./queries/handler/find-expense-b
     FindExpensesByUserQueryHandler,
     FindExpenseByIdQueryHandler,
   ],
+  exports: [ExpenseAgent],
 })
 export class ExpenseModule {}

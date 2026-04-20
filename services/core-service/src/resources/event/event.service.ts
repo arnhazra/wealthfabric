@@ -13,12 +13,12 @@ import { Goal } from "@/resources/goal/schemas/goal.schema"
 import { Debt } from "@/resources/debt/schemas/debt.schema"
 import { Cashflow } from "@/resources/cashflow/schemas/cashflow.schema"
 import { Expense } from "@/resources/expense/schemas/expense.schema"
-import { User } from "@/auth/schemas/user.schema"
 import { formatCurrency } from "@/platform/widget/lib/format-currency"
 import { ExpenseCategoryConfig } from "@/shared/constants/types"
 import { ConfigService } from "@/platform/config/config.service"
 import { UpdateEventCommand } from "./commands/impl/update-event.command"
 import { FindEventByIdQuery } from "./queries/impl/find-event-by-id.query"
+import { AuthService } from "@/auth/auth.service"
 
 @Injectable()
 export class EventService {
@@ -26,7 +26,8 @@ export class EventService {
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,
     private readonly eventEmitter: EventEmitter2,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private readonly authService: AuthService
   ) {}
 
   @OnEvent(AppEventMap.CreateCalendarEvent)
@@ -60,9 +61,7 @@ export class EventService {
         eventSource: "Custom",
       }))
 
-      const user: User = (
-        await this.eventEmitter.emitAsync(AppEventMap.GetUserDetails, userId)
-      ).shift()
+      const user = await this.authService.findUserById(userId)
 
       const assets: Asset[] = (
         await this.eventEmitter.emitAsync(AppEventMap.GetAssetList, userId)

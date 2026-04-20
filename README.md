@@ -20,7 +20,7 @@ The system follows a modular, service-oriented architecture:
 
 - Built with NestJS
 - Organized into domain modules:
-- Assets, Expenses, Goals, Debt, Cashflow, Tax
+- Assets, Expenses, Goals, Debt, Cashflow, Events
 - Handles business logic, authentication (JWT), and API orchestration
 - Integrates AI workflows via LangChain
 
@@ -61,13 +61,7 @@ The platform is modular, with each app solving a specific financial problem:
   Automate and visualize inflows/outflows across accounts for better liquidity management.
 
 - **Calendar**  
-  Financial planning timeline for mapping future events like investments, EMIs, or tax deadlines.
-
-- **TaxAdvisor**  
-  AI-powered tax planning and optimization suggestions based on user financial data.
-
-- **Discover**  
-  Real-time financial news, market trends, and personalized insights.
+  Financial planning timeline for mapping future events like investments, EMIs or Goals.
 
 ---
 

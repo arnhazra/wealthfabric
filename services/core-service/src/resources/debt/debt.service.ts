@@ -19,7 +19,6 @@ export class DebtService {
     private readonly commandBus: CommandBus
   ) {}
 
-  @OnEvent(AppEventMap.CreateDebt)
   async createDebt(userId: string, requestBody: CreateDebtRequestDto) {
     try {
       return await this.commandBus.execute<CreateDebtCommand, Debt>(
@@ -30,7 +29,6 @@ export class DebtService {
     }
   }
 
-  @OnEvent(AppEventMap.GetDebtList)
   async findMyDebts(userId: string, searchKeyword?: string) {
     try {
       const debts = await this.queryBus.execute<FindDebtsByUserQuery, Debt[]>(

@@ -2,13 +2,11 @@ import { Injectable } from "@nestjs/common"
 import { CommandBus, QueryBus } from "@nestjs/cqrs"
 import { CreateThreadCommand } from "./commands/impl/create-thread.command"
 import { Thread } from "./schemas/thread.schema"
-import { EventEmitter2 } from "@nestjs/event-emitter"
-import { AppEventMap } from "@/shared/constants/app-events.map"
 import { ChatDto } from "./dto/chat.dto"
 import { FetchThreadByIdQuery } from "./queries/impl/fetch-thread-by-id.query"
-import { User } from "@/auth/schemas/user.schema"
 import { ChatArgs, ChatStrategy } from "./strategies/chat.strategy"
 import { createOrConvertObjectId } from "@/shared/entity/entity.schema"
+import { AuthService } from "@/auth/auth.service"
 
 @Injectable()
 export class IntelligenceService {
@@ -16,7 +14,7 @@ export class IntelligenceService {
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
     private readonly chatStrategy: ChatStrategy,
-    private readonly eventEmitter: EventEmitter2
+    private readonly authService: AuthService
   ) {}
 
   async getThreadById(threadId: string, isFirstMessage: boolean) {
@@ -47,9 +45,7 @@ export class IntelligenceService {
     const threadId = chatDto.threadId ?? createOrConvertObjectId().toString()
     const thread = await this.getThreadById(threadId, !chatDto.threadId)
     let fullResponse = ""
-    const user: User = (
-      await this.eventEmitter.emitAsync(AppEventMap.GetUserDetails, userId)
-    ).shift()
+    const user = await this.authService.findUserById(userId)
 
     const args: ChatArgs = {
       thread,

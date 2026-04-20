@@ -228,7 +228,7 @@ export class AuthService {
   }
 
   @OnEvent(AppEventMap.GetUserDetails)
-  async findUser(userId: string): Promise<User | null> {
+  async findUserById(userId: string): Promise<User | null> {
     try {
       return await this.queryBus.execute<FindUserByIdQuery, User>(
         new FindUserByIdQuery(userId)

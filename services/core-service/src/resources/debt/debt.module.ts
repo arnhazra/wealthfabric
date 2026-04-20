@@ -1,6 +1,5 @@
 import { Module } from "@nestjs/common"
 import { EntityModule } from "@/shared/entity/entity.module"
-import { config } from "@/config"
 import { DbConnectionMap } from "@/shared/entity/entity-db-connection.map"
 import { DebtService } from "./debt.service"
 import { DebtController } from "./debt.controller"
@@ -12,6 +11,7 @@ import { DeleteDebtCommandHandler } from "./commands/handler/delete-debt.handler
 import { FindDebtByIdQueryHandler } from "./queries/handler/find-debt-by-id.handler"
 import { UpdateDebtCommandHandler } from "./commands/handler/update-debt.handler"
 import { FindDebtsByUserQueryHandler } from "./queries/handler/find-debt-by-user.handler"
+import { DebtAgent } from "./debt.agent"
 
 @Module({
   imports: [
@@ -23,6 +23,7 @@ import { FindDebtsByUserQueryHandler } from "./queries/handler/find-debt-by-user
   ],
   controllers: [DebtController],
   providers: [
+    DebtAgent,
     DebtService,
     DebtRepository,
     CreateDebtCommandHandler,
@@ -31,5 +32,6 @@ import { FindDebtsByUserQueryHandler } from "./queries/handler/find-debt-by-user
     FindDebtsByUserQueryHandler,
     FindDebtByIdQueryHandler,
   ],
+  exports: [DebtAgent],
 })
 export class DebtModule {}

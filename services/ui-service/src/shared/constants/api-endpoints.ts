@@ -16,9 +16,7 @@ export const endPoints = {
   asset: "/resource/asset",
   debt: "/resource/debt",
   goal: "/resource/goal",
-  news: "/resource/news",
   expense: "/resource/expense",
-  tax: "/resource/tax",
   cashflow: "/resource/cashflow",
   events: "/resource/event",
 }
