@@ -99,6 +99,7 @@ export class SubscriptionService {
     }
   }
 
+  @OnEvent(AppEventMap.GetSubscriptionDetails)
   async getMySubscription(userId: string) {
     try {
       const subscription: Subscription | null | undefined =
