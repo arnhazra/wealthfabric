@@ -18,9 +18,17 @@ export class EventAgent {
           eventMonth
         )
 
-        return JSON.stringify(events)
+        return {
+          success: true,
+          data: events,
+          error: null,
+        }
       } catch (error) {
-        return "Unable to get the event list"
+        return {
+          success: false,
+          data: null,
+          error: "Unable to get the event list",
+        }
       }
     },
     {
@@ -45,9 +53,17 @@ export class EventAgent {
           eventName,
           eventDate,
         })
-        return "Event created successfully"
+        return {
+          success: true,
+          data: "Event created successfully",
+          error: null,
+        }
       } catch (error) {
-        return "Failed to create the event"
+        return {
+          success: false,
+          data: null,
+          error: "Failed to create the event",
+        }
       }
     },
     {

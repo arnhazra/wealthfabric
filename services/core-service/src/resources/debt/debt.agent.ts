@@ -39,9 +39,17 @@ export class DebtAgent {
           interestRate,
         }
         await this.service.createDebt(userId, debtRequest)
-        return "Debt created successfully"
+        return {
+          success: true,
+          data: "Debt created successfully",
+          error: null,
+        }
       } catch (error) {
-        return "Failed to create the debt"
+        return {
+          success: false,
+          data: null,
+          error: "Failed to create the debt",
+        }
       }
     },
     {
@@ -61,9 +69,17 @@ export class DebtAgent {
     }) => {
       try {
         const debts = await this.service.findMyDebts(userId, searchKeyword)
-        return JSON.stringify(debts)
+        return {
+          success: true,
+          data: debts,
+          error: null,
+        }
       } catch (error) {
-        return "Unable to get the debt list"
+        return {
+          success: false,
+          data: null,
+          error: "Unable to get the debt list",
+        }
       }
     },
     {
@@ -77,9 +93,17 @@ export class DebtAgent {
     async ({ userId }: { userId: string }) => {
       try {
         const valuation = await this.service.calculateTotalDebt(userId)
-        return `Total debt details is ${JSON.stringify(valuation)}`
+        return {
+          success: true,
+          data: valuation,
+          error: null,
+        }
       } catch (error) {
-        return "Unable to get total debt"
+        return {
+          success: false,
+          data: null,
+          error: "Unable to get total debt",
+        }
       }
     },
     {

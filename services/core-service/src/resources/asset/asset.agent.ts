@@ -15,24 +15,27 @@ import { AssetGroup } from "@/resources/asset/schemas/assetgroup.schema"
 export class AssetAgent {
   constructor(private readonly service: AssetService) {}
 
-  public getAssetTypesTool = tool(
-    async () => {
-      return Object.values(AssetType)
-    },
-    {
-      name: "get_asset_types",
-      description: "Get types of assets",
-      schema: z.object({}),
-    }
-  )
+  public getAssetTypesTool = tool(async () => Object.values(AssetType), {
+    name: "get_asset_types",
+    description: "Get types of assets",
+    schema: z.object({}),
+  })
 
   public getAssetListTool = tool(
     async ({ userId }: { userId: string }) => {
       try {
         const assets = await this.service.findAllMyAssets(userId)
-        return JSON.stringify(assets)
+        return {
+          success: true,
+          data: assets,
+          error: null,
+        }
       } catch (error) {
-        return "Unable to get the asset list"
+        return {
+          success: false,
+          data: null,
+          error: "Unable to get the asset list",
+        }
       }
     },
     {
@@ -47,9 +50,17 @@ export class AssetAgent {
       try {
         const valuation =
           await this.service.calculateTotalAssetValuation(userId)
-        return `Total asset is ${valuation}`
+        return {
+          success: true,
+          data: valuation,
+          error: null,
+        }
       } catch (error) {
-        return "Unable to get total assets"
+        return {
+          success: false,
+          data: null,
+          error: "Unable to get total assets",
+        }
       }
     },
     {
@@ -71,9 +82,17 @@ export class AssetAgent {
         await this.service.createAssetGroup(userId, {
           assetgroupName,
         })
-        return "AssetGroup created successfully"
+        return {
+          success: true,
+          data: "AssetGroup created successfully",
+          error: null,
+        }
       } catch (error) {
-        return "Failed to create the assetgroup"
+        return {
+          success: false,
+          data: null,
+          error: "Failed to create the assetgroup",
+        }
       }
     },
     {
@@ -96,9 +115,17 @@ export class AssetAgent {
           userId,
           searchKeyword
         )
-        return JSON.stringify(assetgroups)
+        return {
+          success: true,
+          data: assetgroups,
+          error: null,
+        }
       } catch (error) {
-        return "Unable to get the assetgroup list"
+        return {
+          success: false,
+          data: null,
+          error: "Unable to get the assetgroup list",
+        }
       }
     },
     {
@@ -117,13 +144,22 @@ export class AssetAgent {
       assetgroupName: string
     }) => {
       try {
-        const assetgroup: any = (
-          await this.service.findMyAssetGroups(userId, assetgroupName)
-        ).shift()
-        const valuation = assetgroup.currentValuation ?? 0
-        return `Valuation is ${valuation}`
+        const assetgroup = await this.service.findMyAssetGroups(
+          userId,
+          assetgroupName
+        )
+
+        return {
+          success: true,
+          data: assetgroup,
+          error: null,
+        }
       } catch (error) {
-        return "Unable to get the valuation"
+        return {
+          success: false,
+          data: null,
+          error: "Unable to get the valuation",
+        }
       }
     },
     {

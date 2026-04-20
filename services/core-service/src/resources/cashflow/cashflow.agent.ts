@@ -11,9 +11,17 @@ export class CashflowAgent {
     async ({ userId }: { userId: string }) => {
       try {
         const cashflows = await this.service.findMyCashflows(userId)
-        return JSON.stringify(cashflows)
+        return {
+          success: true,
+          data: cashflows,
+          error: null,
+        }
       } catch (error) {
-        return "Unable to get the cashflow list"
+        return {
+          success: false,
+          data: null,
+          error: "Unable to get the cashflow list",
+        }
       }
     },
     {

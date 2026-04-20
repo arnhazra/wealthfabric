@@ -21,9 +21,17 @@ export class ExpenseAgent {
     }) => {
       try {
         const expenses = await this.service.findMyExpenses(userId, expenseMonth)
-        return JSON.stringify(expenses)
+        return {
+          success: true,
+          data: expenses,
+          error: null,
+        }
       } catch (error) {
-        return "Unable to get the expense list"
+        return {
+          success: false,
+          data: null,
+          error: "Unable to get the expense list",
+        }
       }
     },
     {
@@ -54,9 +62,17 @@ export class ExpenseAgent {
           expenseCategory,
           expenseDate,
         })
-        return "Expense created successfully"
+        return {
+          success: true,
+          data: "Expense created successfully",
+          error: null,
+        }
       } catch (error) {
-        return "Failed to create the expense"
+        return {
+          success: false,
+          data: null,
+          error: "Failed to create the expense",
+        }
       }
     },
     {

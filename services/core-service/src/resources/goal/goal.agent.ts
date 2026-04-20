@@ -22,9 +22,17 @@ export class GoalAgent {
           goalDate,
           goalAmount,
         })
-        return "Goal created successfully"
+        return {
+          success: true,
+          data: "Goal created successfully",
+          error: null,
+        }
       } catch (error) {
-        return "Failed to create the goal"
+        return {
+          success: false,
+          data: null,
+          error: "Failed to create the goal",
+        }
       }
     },
     {
@@ -38,9 +46,17 @@ export class GoalAgent {
     async ({ userId }: { userId: string }) => {
       try {
         const goals = await this.service.findMyGoals(userId)
-        return JSON.stringify(goals)
+        return {
+          success: true,
+          data: goals,
+          error: null,
+        }
       } catch (error) {
-        return "Unable to get the goal list"
+        return {
+          success: false,
+          data: null,
+          error: "Unable to get the goal list",
+        }
       }
     },
     {
@@ -54,9 +70,17 @@ export class GoalAgent {
     async ({ userId }: { userId: string }) => {
       try {
         const goal = await this.service.findNearestGoal(userId)
-        return JSON.stringify(goal)
+        return {
+          success: true,
+          data: goal,
+          error: null,
+        }
       } catch (error) {
-        return "Unable to get the goal list"
+        return {
+          success: false,
+          data: null,
+          error: "Unable to get the goal list",
+        }
       }
     },
     {
