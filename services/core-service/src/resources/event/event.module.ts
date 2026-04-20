@@ -13,10 +13,20 @@ import { FindEventByIdQueryHandler } from "./queries/handler/find-event-by-id.ha
 import { UpdateEventByIdCommandHandler } from "./commands/handler/update-event.handler"
 import { AuthModule } from "@/auth/auth.module"
 import { EventAgent } from "./event.agent"
+import { AssetModule } from "../asset/asset.module"
+import { DebtModule } from "../debt/debt.module"
+import { CashFlowModule } from "../cashflow/cashflow.module"
+import { GoalModule } from "../goal/goal.module"
+import { ExpenseModule } from "../expense/expense.module"
 
 @Module({
   imports: [
     AuthModule,
+    AssetModule,
+    DebtModule,
+    CashFlowModule,
+    GoalModule,
+    ExpenseModule,
     CqrsModule,
     EntityModule.forFeature(
       [{ name: Event.name, schema: EventSchema }],
@@ -34,6 +44,6 @@ import { EventAgent } from "./event.agent"
     FindEventByIdQueryHandler,
     UpdateEventByIdCommandHandler,
   ],
-  exports: [EventAgent],
+  exports: [EventAgent, EventService],
 })
 export class EventModule {}

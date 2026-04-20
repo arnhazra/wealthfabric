@@ -39,7 +39,6 @@ export class GoalService {
     }
   }
 
-  @OnEvent(AppEventMap.GetNearestGoal)
   async findNearestGoal(userId: string) {
     try {
       const goal = await this.queryBus.execute<FindNearestGoalQuery, Goal>(

@@ -32,6 +32,6 @@ import { ExpenseAgent } from "./expense.agent"
     FindExpensesByUserQueryHandler,
     FindExpenseByIdQueryHandler,
   ],
-  exports: [ExpenseAgent],
+  exports: [ExpenseAgent, ExpenseService],
 })
 export class ExpenseModule {}

@@ -13,10 +13,12 @@ import { FindCashflowsByUserQueryHandler } from "./queries/handler/find-cashflow
 import { FindCashflowByIdHandler } from "./queries/handler/find-cashflow-by-id.handler"
 import { UpdateCashflowHandler } from "./commands/handler/update-cashflow.handler"
 import { CashflowAgent } from "./cashflow.agent"
+import { AssetModule } from "../asset/asset.module"
 
 @Module({
   imports: [
     CqrsModule,
+    AssetModule,
     EntityModule.forFeature(
       [{ name: Cashflow.name, schema: CashflowSchema }],
       DbConnectionMap.Resource
@@ -34,6 +36,6 @@ import { CashflowAgent } from "./cashflow.agent"
     FindCashflowByIdHandler,
     UpdateCashflowHandler,
   ],
-  exports: [CashflowAgent],
+  exports: [CashflowAgent, CashFlowService],
 })
 export class CashFlowModule {}

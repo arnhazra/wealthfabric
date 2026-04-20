@@ -29,7 +29,6 @@ export class ExpenseService {
     }
   }
 
-  @OnEvent(AppEventMap.GetExpenseByMonth)
   async findMyExpenses(
     userId: string,
     monthFilter?: string,

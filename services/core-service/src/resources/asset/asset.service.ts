@@ -211,7 +211,6 @@ export class AssetService {
     }
   }
 
-  @OnEvent(AppEventMap.GetTotalAsset)
   async calculateTotalAssetValuation(reqUserId: string) {
     try {
       const assets = await this.queryBus.execute<

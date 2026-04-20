@@ -1,33 +1,31 @@
-import { AppEventMap } from "@/shared/constants/app-events.map"
 import { Injectable } from "@nestjs/common"
-import { EventEmitter2 } from "@nestjs/event-emitter"
 import { formatCurrency } from "./lib/format-currency"
 import { format } from "date-fns"
 import { ConfigService } from "../config/config.service"
 import { AuthService } from "@/auth/auth.service"
+import { AssetService } from "@/resources/asset/asset.service"
+import { DebtService } from "@/resources/debt/debt.service"
+import { GoalService } from "@/resources/goal/goal.service"
+import { ExpenseService } from "@/resources/expense/expense.service"
 
 @Injectable()
 export class WidgetService {
   constructor(
-    private readonly eventEmitter: EventEmitter2,
     private readonly configService: ConfigService,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly assetService: AssetService,
+    private readonly debtService: DebtService,
+    private readonly goalService: GoalService,
+    private readonly expenseService: ExpenseService
   ) {}
 
   async getWidgets(userId: string) {
     try {
-      const assetData = (
-        await this.eventEmitter.emitAsync(AppEventMap.GetTotalAsset, userId)
-      ).shift()
-      const debtData = (
-        await this.eventEmitter.emitAsync(AppEventMap.GetTotalDebt, userId)
-      ).shift()
-      const goalData = (
-        await this.eventEmitter.emitAsync(AppEventMap.GetNearestGoal, userId)
-      ).shift()
-      const expenseData = (
-        await this.eventEmitter.emitAsync(AppEventMap.GetExpenseByMonth, userId)
-      ).shift()
+      const assetData =
+        await this.assetService.calculateTotalAssetValuation(userId)
+      const debtData = await this.debtService.calculateTotalDebt(userId)
+      const goalData = await this.goalService.findNearestGoal(userId)
+      const expenseData = await this.expenseService.findMyExpenses(userId)
 
       const user = await this.authService.findUserById(userId)
 

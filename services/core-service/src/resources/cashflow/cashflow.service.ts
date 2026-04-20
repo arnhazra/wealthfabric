@@ -13,13 +13,15 @@ import { FindCashflowsByUserQuery } from "./queries/impl/find-cashflows-by-user.
 import { computeNextDate } from "./helpers/compute-next-date"
 import { UpdateCashflowCommand } from "./commands/impl/update-cashflow.command"
 import { FindCashflowByIdQuery } from "./queries/impl/find-cashflow-by-id.query"
+import { AssetService } from "../asset/asset.service"
 
 @Injectable()
 export class CashFlowService {
   constructor(
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,
-    private readonly eventEmitter: EventEmitter2
+    private readonly eventEmitter: EventEmitter2,
+    private readonly assetService: AssetService
   ) {}
 
   async create(userId: string, requestBody: CreateCashFlowRequestDto) {
@@ -78,13 +80,10 @@ export class CashFlowService {
   }
 
   async processCashflow(cashflow: Cashflow) {
-    const targetAsset: Asset = (
-      await this.eventEmitter.emitAsync(
-        AppEventMap.FindAssetById,
-        String(cashflow.userId),
-        String(cashflow.targetAsset)
-      )
-    ).shift()
+    const targetAsset: Asset = await this.assetService.findAssetById(
+      String(cashflow.userId),
+      String(cashflow.targetAsset)
+    )
 
     if (!targetAsset) return
 
@@ -93,12 +92,13 @@ export class CashFlowService {
         ? cashflow.amount
         : -cashflow.amount
 
-    await this.eventEmitter.emitAsync(
-      AppEventMap.UpdateAssetById,
+    const { assetgroupId, currentValuation, ...rest } = targetAsset
+    await this.assetService.updateAssetById(
       String(targetAsset.userId),
       String(targetAsset._id),
       {
-        assetgroupId: targetAsset.assetgroupId,
+        ...rest,
+        assetgroupId: String(targetAsset.assetgroupId),
         currentValuation: targetAsset.currentValuation + delta,
       }
     )

@@ -90,7 +90,6 @@ export class SubscriptionService {
     }
   }
 
-  @OnEvent(AppEventMap.ActivateTrialSubscription)
   async activateTrial(userId: string) {
     try {
       await this.commandBus.execute(new CreateSubscriptionCommand(userId, 0))
@@ -100,7 +99,6 @@ export class SubscriptionService {
     }
   }
 
-  @OnEvent(AppEventMap.GetSubscriptionDetails)
   async getMySubscription(userId: string) {
     try {
       const subscription: Subscription | null | undefined =

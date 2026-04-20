@@ -32,6 +32,6 @@ import { DebtAgent } from "./debt.agent"
     FindDebtsByUserQueryHandler,
     FindDebtByIdQueryHandler,
   ],
-  exports: [DebtAgent],
+  exports: [DebtAgent, DebtService],
 })
 export class DebtModule {}

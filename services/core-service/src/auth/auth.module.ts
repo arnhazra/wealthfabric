@@ -17,11 +17,13 @@ import { TokenRepository } from "./repositories/token.repository"
 import { config } from "@/config"
 import { FindUserByEmailQueryHandler } from "./queries/handler/find-user-by-email.handler"
 import { FindUserByIdQueryHandler } from "./queries/handler/find-user-by-id.handler"
+import { SubscriptionModule } from "@/platform/subscription/subscription.module"
 
 @Module({
   imports: [
     CqrsModule,
     HttpModule,
+    SubscriptionModule,
     EntityModule.forRoot(
       config.AZURE_COSMOS_DB_CONNECTION_STRING,
       DbConnectionMap.Auth

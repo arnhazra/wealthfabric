@@ -88,7 +88,6 @@ export class DebtService {
     }
   }
 
-  @OnEvent(AppEventMap.GetTotalDebt)
   async calculateTotalDebt(reqUserId: string) {
     try {
       const debts = await this.findMyDebts(reqUserId)

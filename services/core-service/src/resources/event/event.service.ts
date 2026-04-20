@@ -6,7 +6,6 @@ import { DeleteEventCommand } from "./commands/impl/delete-event.command"
 import { CreateEventCommand } from "./commands/impl/create-event.command"
 import { CreateEventRequestDto } from "./dto/request/create-event.request.dto"
 import { FindEventsByUserQuery } from "./queries/impl/find-event-by-user.query"
-import { EventEmitter2, OnEvent } from "@nestjs/event-emitter"
 import { AppEventMap } from "@/shared/constants/app-events.map"
 import { Asset } from "@/resources/asset/schemas/asset.schema"
 import { Goal } from "@/resources/goal/schemas/goal.schema"
@@ -19,18 +18,26 @@ import { ConfigService } from "@/platform/config/config.service"
 import { UpdateEventCommand } from "./commands/impl/update-event.command"
 import { FindEventByIdQuery } from "./queries/impl/find-event-by-id.query"
 import { AuthService } from "@/auth/auth.service"
+import { AssetService } from "../asset/asset.service"
+import { DebtService } from "../debt/debt.service"
+import { ExpenseService } from "../expense/expense.service"
+import { GoalService } from "../goal/goal.service"
+import { CashFlowService } from "../cashflow/cashflow.service"
 
 @Injectable()
 export class EventService {
   constructor(
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,
-    private readonly eventEmitter: EventEmitter2,
     private readonly configService: ConfigService,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly assetService: AssetService,
+    private readonly debtService: DebtService,
+    private readonly goalService: GoalService,
+    private readonly cashFlowService: CashFlowService,
+    private readonly expenseService: ExpenseService
   ) {}
 
-  @OnEvent(AppEventMap.CreateCalendarEvent)
   async createEvent(userId: string, requestBody: CreateEventRequestDto) {
     try {
       return await this.commandBus.execute<CreateEventCommand, Event>(
@@ -41,7 +48,6 @@ export class EventService {
     }
   }
 
-  @OnEvent(AppEventMap.GetCalendarEvents)
   async findMyEventsByMonth(userId: string, selectedMonth: string) {
     try {
       const events = await this.queryBus.execute<
@@ -62,10 +68,7 @@ export class EventService {
       }))
 
       const user = await this.authService.findUserById(userId)
-
-      const assets: Asset[] = (
-        await this.eventEmitter.emitAsync(AppEventMap.GetAssetList, userId)
-      ).shift()
+      const assets = await this.assetService.findAllMyAssets(userId)
       const assetStartDateEvents = assets.map((asset) => {
         if (asset.startDate) {
           return {
@@ -92,9 +95,7 @@ export class EventService {
         }
       })
 
-      const goals: Goal[] = (
-        await this.eventEmitter.emitAsync(AppEventMap.GetGoalList, userId)
-      ).shift()
+      const goals = await this.goalService.findMyGoals(userId)
 
       const goalEvents = goals.map((goal) => ({
         eventDate: goal.goalDate,
@@ -105,9 +106,7 @@ export class EventService {
         eventSource: "Goal",
       }))
 
-      const debts: Debt[] = (
-        await this.eventEmitter.emitAsync(AppEventMap.GetDebtList, userId)
-      ).shift()
+      const debts = await this.debtService.findMyDebts(userId)
 
       const debtStartEvents = debts.map((debt) => ({
         eventDate: debt.startDate,
@@ -136,12 +135,7 @@ export class EventService {
         eventSource: "Debt",
       }))
 
-      const cashflows: Cashflow[] = (
-        await this.eventEmitter.emitAsync(
-          AppEventMap.FindCashFlowsByUserId,
-          userId
-        )
-      ).shift()
+      const cashflows = await this.cashFlowService.findMyCashflows(userId)
       const cashflowEvents = cashflows.map((cashflow) => ({
         eventDate: cashflow.nextExecutionAt,
         eventName: cashflow.description,
@@ -151,13 +145,7 @@ export class EventService {
         eventSource: "Cashflow",
       }))
 
-      const expenses = (
-        await this.eventEmitter.emitAsync(
-          AppEventMap.GetExpenseByMonth,
-          userId,
-          selectedMonth
-        )
-      ).shift()
+      const expenses = await this.expenseService.findMyExpenses(userId)
       const expensesEvents = expenses.expenses.map((expense: Expense) => {
         const expenseCategoryDisplayName =
           parsedExpenseCategories.expenseCategories.find(

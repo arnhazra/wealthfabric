@@ -34,6 +34,6 @@ import { GoalAgent } from "./goal.agent"
     FindGoalByIdQueryHandler,
     FindNearestGoalQueryHandler,
   ],
-  exports: [GoalAgent],
+  exports: [GoalAgent, GoalService],
 })
 export class GoalModule {}
