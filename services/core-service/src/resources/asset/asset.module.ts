@@ -13,7 +13,6 @@ import { UpdateAssetCommandHandler } from "./commands/handler/update-asset.handl
 import { FindAssetsByUserQueryHandler } from "./queries/handler/find-assets-by-user.handler"
 import { FindAssetsByAssetGroupQueryHandler } from "./queries/handler/find-assets-by-assetgroup.handler"
 import { FindAssetsByTypesQueryHandler } from "./queries/handler/find-assets-by-types.handler"
-import { AssetAgent } from "./asset.agent"
 import { AssetGroup, AssetGroupSchema } from "./schemas/assetgroup.schema"
 import { AssetGroupRepository } from "./repositories/assetgroup.repository"
 import { CreateAssetGroupCommandHandler } from "./commands/handler/create-assetgroup.handler"
@@ -36,7 +35,6 @@ import { UpdateAssetGroupCommandHandler } from "./commands/handler/update-assetg
   ],
   controllers: [AssetController, AssetGroupController],
   providers: [
-    AssetAgent,
     AssetService,
     AssetRepository,
     CreateAssetCommandHandler,
@@ -53,6 +51,6 @@ import { UpdateAssetGroupCommandHandler } from "./commands/handler/update-assetg
     FindAllAssetGroupQueryHandler,
     FindAssetGroupByIdQueryHandler,
   ],
-  exports: [AssetAgent, AssetService],
+  exports: [AssetService],
 })
 export class AssetModule {}

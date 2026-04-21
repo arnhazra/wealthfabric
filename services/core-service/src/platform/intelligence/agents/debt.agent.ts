@@ -4,40 +4,17 @@ import {
   CreateDebtSchema,
   GetByUserIdSchema,
   GetDebtListSchema,
-} from "./schemas/debtagent.schema"
-import { DebtService } from "./debt.service"
+} from "./agent-schemas/debtagent.schema"
+import { DebtService } from "../../../resources/debt/debt.service"
 
 @Injectable()
 export class DebtAgent {
   constructor(private readonly service: DebtService) {}
 
   public createDebtTool = tool(
-    async ({
-      userId,
-      debtPurpose,
-      identifier,
-      startDate,
-      endDate,
-      principalAmount,
-      interestRate,
-    }: {
-      userId: string
-      debtPurpose: string
-      identifier: string
-      startDate: string
-      endDate: string
-      principalAmount: number
-      interestRate: number
-    }) => {
+    async (input) => {
       try {
-        const debtRequest = {
-          debtPurpose,
-          identifier,
-          startDate,
-          endDate,
-          principalAmount,
-          interestRate,
-        }
+        const { userId, ...debtRequest } = input
         await this.service.createDebt(userId, debtRequest)
         return {
           success: true,
@@ -60,14 +37,9 @@ export class DebtAgent {
   )
 
   public getDebtListTool = tool(
-    async ({
-      userId,
-      searchKeyword,
-    }: {
-      userId: string
-      searchKeyword: string
-    }) => {
+    async (input) => {
       try {
+        const { userId, searchKeyword } = input
         const debts = await this.service.findMyDebts(userId, searchKeyword)
         return {
           success: true,
@@ -90,8 +62,9 @@ export class DebtAgent {
   )
 
   public getTotalDebtTool = tool(
-    async ({ userId }: { userId: string }) => {
+    async (input) => {
       try {
+        const { userId } = input
         const valuation = await this.service.calculateTotalDebt(userId)
         return {
           success: true,

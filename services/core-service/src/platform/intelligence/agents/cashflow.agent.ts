@@ -3,9 +3,9 @@ import { Injectable } from "@nestjs/common"
 import {
   CreateCashflowSchema,
   GetByUserIdSchema,
-} from "./schemas/cashflowagent.schema"
-import { CashFlowService } from "./cashflow.service"
-import { AssetService } from "../asset/asset.service"
+} from "./agent-schemas/cashflowagent.schema"
+import { CashFlowService } from "../../../resources/cashflow/cashflow.service"
+import { AssetService } from "../../../resources/asset/asset.service"
 
 @Injectable()
 export class CashflowAgent {
@@ -15,8 +15,9 @@ export class CashflowAgent {
   ) {}
 
   public getTargetAssetsTool = tool(
-    async ({ userId }: { userId: string }) => {
+    async (input) => {
       try {
+        const { userId } = input
         const assets = await this.assetService.findAssetsByTypes(userId, [
           "RETIREMENT",
           "LIQUID",

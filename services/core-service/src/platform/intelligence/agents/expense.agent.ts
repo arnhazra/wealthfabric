@@ -4,22 +4,17 @@ import { Injectable } from "@nestjs/common"
 import {
   CreateExpenseSchema,
   GetExpenseByMonthSchema,
-} from "./schemas/expenseagent.schema"
-import { ExpenseService } from "./expense.service"
+} from "./agent-schemas/expenseagent.schema"
+import { ExpenseService } from "../../../resources/expense/expense.service"
 
 @Injectable()
 export class ExpenseAgent {
   constructor(private readonly service: ExpenseService) {}
 
   public getExpenseByMonthTool = tool(
-    async ({
-      userId,
-      expenseMonth,
-    }: {
-      userId: string
-      expenseMonth: string
-    }) => {
+    async (input) => {
       try {
+        const { userId, expenseMonth } = input
         const expenses = await this.service.findMyExpenses(userId, expenseMonth)
         return {
           success: true,
@@ -42,20 +37,10 @@ export class ExpenseAgent {
   )
 
   public createExpenseTool = tool(
-    async ({
-      userId,
-      title,
-      expenseAmount,
-      expenseCategory,
-      expenseDate,
-    }: {
-      userId: string
-      title: string
-      expenseAmount: number
-      expenseCategory: ExpenseCategory
-      expenseDate: string
-    }) => {
+    async (input) => {
       try {
+        const { userId, title, expenseAmount, expenseCategory, expenseDate } =
+          input
         await this.service.createExpense(userId, {
           title,
           expenseAmount,

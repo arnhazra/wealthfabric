@@ -11,7 +11,6 @@ import { DeleteDebtCommandHandler } from "./commands/handler/delete-debt.handler
 import { FindDebtByIdQueryHandler } from "./queries/handler/find-debt-by-id.handler"
 import { UpdateDebtCommandHandler } from "./commands/handler/update-debt.handler"
 import { FindDebtsByUserQueryHandler } from "./queries/handler/find-debt-by-user.handler"
-import { DebtAgent } from "./debt.agent"
 
 @Module({
   imports: [
@@ -23,7 +22,6 @@ import { DebtAgent } from "./debt.agent"
   ],
   controllers: [DebtController],
   providers: [
-    DebtAgent,
     DebtService,
     DebtRepository,
     CreateDebtCommandHandler,
@@ -32,6 +30,6 @@ import { DebtAgent } from "./debt.agent"
     FindDebtsByUserQueryHandler,
     FindDebtByIdQueryHandler,
   ],
-  exports: [DebtAgent, DebtService],
+  exports: [DebtService],
 })
 export class DebtModule {}

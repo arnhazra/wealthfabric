@@ -16,6 +16,12 @@ import { DebtModule } from "@/resources/debt/debt.module"
 import { GoalModule } from "@/resources/goal/goal.module"
 import { EventModule } from "@/resources/event/event.module"
 import { ExpenseModule } from "@/resources/expense/expense.module"
+import { AssetAgent } from "./agents/asset.agent"
+import { DebtAgent } from "./agents/debt.agent"
+import { CashflowAgent } from "./agents/cashflow.agent"
+import { GoalAgent } from "./agents/goal.agent"
+import { ExpenseAgent } from "./agents/expense.agent"
+import { EventAgent } from "./agents/event.agent"
 
 @Module({
   imports: [
@@ -39,6 +45,12 @@ import { ExpenseModule } from "@/resources/expense/expense.module"
     ChatStrategy,
     CreateThreadCommandHandler,
     FetchThreadByIdQueryHandler,
+    AssetAgent,
+    DebtAgent,
+    CashflowAgent,
+    GoalAgent,
+    ExpenseAgent,
+    EventAgent,
   ],
 })
 export class IntelligenceModule {}

@@ -1,5 +1,8 @@
+import {
+  FlowDirection,
+  FlowFrequency,
+} from "@/resources/cashflow/schemas/cashflow.schema"
 import { z } from "zod"
-import { FlowDirection, FlowFrequency } from "./cashflow.schema"
 
 export const GetByUserIdSchema = z.object({
   userId: z.string().describe("user id of the user"),

@@ -12,7 +12,6 @@ import { FindEventsByUserQueryHandler } from "./queries/handler/find-event-by-us
 import { FindEventByIdQueryHandler } from "./queries/handler/find-event-by-id.handler"
 import { UpdateEventByIdCommandHandler } from "./commands/handler/update-event.handler"
 import { AuthModule } from "@/auth/auth.module"
-import { EventAgent } from "./event.agent"
 import { AssetModule } from "../asset/asset.module"
 import { DebtModule } from "../debt/debt.module"
 import { CashFlowModule } from "../cashflow/cashflow.module"
@@ -35,7 +34,6 @@ import { ExpenseModule } from "../expense/expense.module"
   ],
   controllers: [EventController],
   providers: [
-    EventAgent,
     EventService,
     EventRepository,
     CreateEventCommandHandler,
@@ -44,6 +42,6 @@ import { ExpenseModule } from "../expense/expense.module"
     FindEventByIdQueryHandler,
     UpdateEventByIdCommandHandler,
   ],
-  exports: [EventAgent, EventService],
+  exports: [EventService],
 })
 export class EventModule {}

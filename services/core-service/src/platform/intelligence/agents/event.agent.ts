@@ -3,16 +3,17 @@ import { Injectable } from "@nestjs/common"
 import {
   CreateEventSchema,
   GetEventByMonthSchema,
-} from "./schemas/eventagent.schema"
-import { EventService } from "./event.service"
+} from "./agent-schemas/eventagent.schema"
+import { EventService } from "../../../resources/event/event.service"
 
 @Injectable()
 export class EventAgent {
   constructor(private readonly service: EventService) {}
 
   public getEventByMonthTool = tool(
-    async ({ userId, eventMonth }: { userId: string; eventMonth: string }) => {
+    async (input) => {
       try {
+        const { userId, eventMonth } = input
         const events = await this.service.findMyEventsByMonth(
           userId,
           eventMonth
@@ -39,16 +40,9 @@ export class EventAgent {
   )
 
   public createEventTool = tool(
-    async ({
-      userId,
-      eventName,
-      eventDate,
-    }: {
-      userId: string
-      eventName: string
-      eventDate: string
-    }) => {
+    async (input) => {
       try {
+        const { userId, eventName, eventDate } = input
         await this.service.createEvent(userId, {
           eventName,
           eventDate,

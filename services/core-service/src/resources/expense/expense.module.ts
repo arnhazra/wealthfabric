@@ -11,7 +11,6 @@ import { DeleteExpenseCommandHandler } from "./commands/handler/delete-expense.h
 import { FindExpenseByIdQueryHandler } from "./queries/handler/find-expense-by-id.handler"
 import { UpdateExpenseCommandHandler } from "./commands/handler/update-expense.handler"
 import { FindExpensesByUserQueryHandler } from "./queries/handler/find-expense-by-user.handler"
-import { ExpenseAgent } from "./expense.agent"
 
 @Module({
   imports: [
@@ -23,7 +22,6 @@ import { ExpenseAgent } from "./expense.agent"
   ],
   controllers: [ExpenseController],
   providers: [
-    ExpenseAgent,
     ExpenseService,
     ExpenseRepository,
     CreateExpenseCommandHandler,
@@ -32,6 +30,6 @@ import { ExpenseAgent } from "./expense.agent"
     FindExpensesByUserQueryHandler,
     FindExpenseByIdQueryHandler,
   ],
-  exports: [ExpenseAgent, ExpenseService],
+  exports: [ExpenseService],
 })
 export class ExpenseModule {}

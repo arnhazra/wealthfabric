@@ -12,7 +12,6 @@ import { FindCashflowsQueryHandler } from "./queries/handler/find-cashflows.hand
 import { FindCashflowsByUserQueryHandler } from "./queries/handler/find-cashflows-by-user.handler"
 import { FindCashflowByIdHandler } from "./queries/handler/find-cashflow-by-id.handler"
 import { UpdateCashflowHandler } from "./commands/handler/update-cashflow.handler"
-import { CashflowAgent } from "./cashflow.agent"
 import { AssetModule } from "../asset/asset.module"
 
 @Module({
@@ -26,7 +25,6 @@ import { AssetModule } from "../asset/asset.module"
   ],
   controllers: [CashFlowController],
   providers: [
-    CashflowAgent,
     CashFlowService,
     CashFlowRepository,
     CreateCashflowCommandHandler,
@@ -36,6 +34,6 @@ import { AssetModule } from "../asset/asset.module"
     FindCashflowByIdHandler,
     UpdateCashflowHandler,
   ],
-  exports: [CashflowAgent, CashFlowService],
+  exports: [CashFlowService],
 })
 export class CashFlowModule {}

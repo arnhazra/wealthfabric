@@ -1,23 +1,19 @@
 import { tool } from "langchain"
 import { Injectable } from "@nestjs/common"
-import { CreateGoalSchema, GetByUserIdSchema } from "./schemas/goalagent.schema"
-import { GoalService } from "./goal.service"
+import {
+  CreateGoalSchema,
+  GetByUserIdSchema,
+} from "./agent-schemas/goalagent.schema"
+import { GoalService } from "../../../resources/goal/goal.service"
 
 @Injectable()
 export class GoalAgent {
   constructor(private readonly service: GoalService) {}
 
   public createGoalTool = tool(
-    async ({
-      userId,
-      goalDate,
-      goalAmount,
-    }: {
-      userId: string
-      goalDate: string
-      goalAmount: number
-    }) => {
+    async (input) => {
       try {
+        const { userId, goalDate, goalAmount } = input
         await this.service.createGoal(userId, {
           goalDate,
           goalAmount,
@@ -43,8 +39,9 @@ export class GoalAgent {
   )
 
   public getGoalListTool = tool(
-    async ({ userId }: { userId: string }) => {
+    async (input) => {
       try {
+        const { userId } = input
         const goals = await this.service.findMyGoals(userId)
         return {
           success: true,
@@ -67,8 +64,9 @@ export class GoalAgent {
   )
 
   public getNearestGoalTool = tool(
-    async ({ userId }: { userId: string }) => {
+    async (input) => {
       try {
+        const { userId } = input
         const goal = await this.service.findNearestGoal(userId)
         return {
           success: true,

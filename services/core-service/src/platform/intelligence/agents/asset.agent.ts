@@ -7,8 +7,8 @@ import {
   CreateAssetGroupSchema,
   GetAssetGroupListSchema,
   GetAssetGroupValuationSchema,
-} from "./schemas/assetagent.schema"
-import { AssetService } from "./asset.service"
+} from "./agent-schemas/assetagent.schema"
+import { AssetService } from "../../../resources/asset/asset.service"
 import { AssetGroup } from "@/resources/asset/schemas/assetgroup.schema"
 
 @Injectable()
@@ -22,8 +22,9 @@ export class AssetAgent {
   })
 
   public getAssetListTool = tool(
-    async ({ userId }: { userId: string }) => {
+    async (input) => {
       try {
+        const { userId } = input
         const assets = await this.service.findAllMyAssets(userId)
         return {
           success: true,
@@ -46,8 +47,9 @@ export class AssetAgent {
   )
 
   public getTotalAssetTool = tool(
-    async ({ userId }: { userId: string }) => {
+    async (input) => {
       try {
+        const { userId } = input
         const valuation =
           await this.service.calculateTotalAssetValuation(userId)
         return {
@@ -71,14 +73,9 @@ export class AssetAgent {
   )
 
   public createAssetGroupTool = tool(
-    async ({
-      userId,
-      assetgroupName,
-    }: {
-      userId: string
-      assetgroupName: string
-    }) => {
+    async (input) => {
       try {
+        const { userId, assetgroupName } = input
         await this.service.createAssetGroup(userId, {
           assetgroupName,
         })
@@ -103,14 +100,9 @@ export class AssetAgent {
   )
 
   public getAssetGroupListTool = tool(
-    async ({
-      userId,
-      searchKeyword,
-    }: {
-      userId: string
-      searchKeyword: string
-    }) => {
+    async (input) => {
       try {
+        const { userId, searchKeyword } = input
         const assetgroups: AssetGroup[] = await this.service.findMyAssetGroups(
           userId,
           searchKeyword
@@ -136,14 +128,9 @@ export class AssetAgent {
   )
 
   public getAssetGroupValuationTool = tool(
-    async ({
-      userId,
-      assetgroupName,
-    }: {
-      userId: string
-      assetgroupName: string
-    }) => {
+    async (input) => {
       try {
+        const { userId, assetgroupName } = input
         const assetgroup = await this.service.findMyAssetGroups(
           userId,
           assetgroupName
