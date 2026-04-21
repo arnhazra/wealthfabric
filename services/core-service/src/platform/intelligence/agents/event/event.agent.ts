@@ -1,10 +1,7 @@
 import { tool } from "langchain"
 import { Injectable } from "@nestjs/common"
-import {
-  CreateEventSchema,
-  GetEventByMonthSchema,
-} from "./agent-schemas/eventagent.schema"
-import { EventService } from "../../../resources/event/event.service"
+import { CreateEventSchema, GetEventByMonthSchema } from "./eventagent.schema"
+import { EventService } from "../../../../resources/event/event.service"
 
 @Injectable()
 export class EventAgent {

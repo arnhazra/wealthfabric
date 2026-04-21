@@ -8,7 +8,7 @@ import { CreateThreadCommandHandler } from "./commands/handler/create-thread.han
 import { IntelligenceRepository } from "./intelligence.repository"
 import { EntityModule } from "@/shared/entity/entity.module"
 import { FetchThreadByIdQueryHandler } from "./queries/handler/fetch-thread-by-id.handler"
-import { ChatStrategy } from "./strategies/chat.strategy"
+import { IntelligenceOrchestrator } from "./intelligence.orchestrator"
 import { AuthModule } from "@/auth/auth.module"
 import { AssetModule } from "@/resources/asset/asset.module"
 import { CashFlowModule } from "@/resources/cashflow/cashflow.module"
@@ -16,12 +16,12 @@ import { DebtModule } from "@/resources/debt/debt.module"
 import { GoalModule } from "@/resources/goal/goal.module"
 import { EventModule } from "@/resources/event/event.module"
 import { ExpenseModule } from "@/resources/expense/expense.module"
-import { AssetAgent } from "./agents/asset.agent"
-import { DebtAgent } from "./agents/debt.agent"
-import { CashflowAgent } from "./agents/cashflow.agent"
-import { GoalAgent } from "./agents/goal.agent"
-import { ExpenseAgent } from "./agents/expense.agent"
-import { EventAgent } from "./agents/event.agent"
+import { AssetAgent } from "./agents/asset/asset.agent"
+import { DebtAgent } from "./agents/debt/debt.agent"
+import { CashflowAgent } from "./agents/cashflow/cashflow.agent"
+import { GoalAgent } from "./agents/goal/goal.agent"
+import { ExpenseAgent } from "./agents/expense/expense.agent"
+import { EventAgent } from "./agents/event/event.agent"
 
 @Module({
   imports: [
@@ -42,7 +42,7 @@ import { EventAgent } from "./agents/event.agent"
   providers: [
     IntelligenceService,
     IntelligenceRepository,
-    ChatStrategy,
+    IntelligenceOrchestrator,
     CreateThreadCommandHandler,
     FetchThreadByIdQueryHandler,
     AssetAgent,

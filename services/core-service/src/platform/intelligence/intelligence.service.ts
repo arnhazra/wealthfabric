@@ -4,7 +4,7 @@ import { CreateThreadCommand } from "./commands/impl/create-thread.command"
 import { Thread } from "./schemas/thread.schema"
 import { ChatDto } from "./dto/chat.dto"
 import { FetchThreadByIdQuery } from "./queries/impl/fetch-thread-by-id.query"
-import { ChatArgs, ChatStrategy } from "./strategies/chat.strategy"
+import { ChatArgs, IntelligenceOrchestrator } from "./intelligence.orchestrator"
 import { createOrConvertObjectId } from "@/shared/entity/entity.schema"
 import { AuthService } from "@/auth/auth.service"
 
@@ -13,7 +13,7 @@ export class IntelligenceService {
   constructor(
     private readonly commandBus: CommandBus,
     private readonly queryBus: QueryBus,
-    private readonly chatStrategy: ChatStrategy,
+    private readonly orchestrator: IntelligenceOrchestrator,
     private readonly authService: AuthService
   ) {}
 
@@ -53,7 +53,7 @@ export class IntelligenceService {
       user,
     }
 
-    for await (const token of this.chatStrategy.chatStream(args)) {
+    for await (const token of this.orchestrator.chatStream(args)) {
       fullResponse += token
       yield { type: "token", data: token }
     }

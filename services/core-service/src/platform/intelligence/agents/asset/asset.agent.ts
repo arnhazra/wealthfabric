@@ -7,8 +7,8 @@ import {
   CreateAssetGroupSchema,
   GetAssetGroupListSchema,
   GetAssetGroupValuationSchema,
-} from "./agent-schemas/assetagent.schema"
-import { AssetService } from "../../../resources/asset/asset.service"
+} from "./assetagent.schema"
+import { AssetService } from "../../../../resources/asset/asset.service"
 import { AssetGroup } from "@/resources/asset/schemas/assetgroup.schema"
 
 @Injectable()

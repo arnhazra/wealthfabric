@@ -218,7 +218,7 @@ export function ResourceCard<T extends keyof ResourceTypeMap>({
         <CardContent>
           <div className="space-y-2">
             <div className="flex justify-between items-center">
-              <span className="text-sm text-theme-300">{info.infoHeader}</span>
+              <span className="text-sm text-theme-200">{info.infoHeader}</span>
               <span className="text-sm font-medium">
                 <Show
                   condition={resourceType === ResourceType.ASSET}
@@ -230,7 +230,7 @@ export function ResourceCard<T extends keyof ResourceTypeMap>({
             </div>
             <Show condition={!!valuation.valuationHeader}>
               <div className="flex justify-between items-center">
-                <span className="text-sm text-theme-300">
+                <span className="text-sm text-theme-200">
                   {valuation.valuationHeader}
                 </span>
                 {typeof valuation.valuationAmount === "string" ? (

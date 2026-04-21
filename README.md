@@ -58,7 +58,7 @@ The platform is modular, with each app solving a specific financial problem:
   Track liabilities (loans, credit cards, mortgages) with repayment schedules and outstanding balances.
 
 - **CashFlow**  
-  Automate and visualize inflows/outflows across accounts for better liquidity management.
+  Automate and visualize Inward/Outward cashflows across accounts for better liquidity management.
 
 - **Calendar**  
   Financial planning timeline for mapping future events like investments, EMIs or Goals.

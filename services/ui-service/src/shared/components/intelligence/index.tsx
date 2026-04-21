@@ -147,16 +147,16 @@ export default function Intelligence() {
                   </IconContainer>
                 </div>
                 <p className="text-white">{PLATFORM_NAME} Intelligence</p>
-                <p className="text-xs mt-2 text-theme-300 p-6">
+                <p className="text-xs mt-2 text-theme-200 p-6">
                   {platformConfig?.otherConstants.aiSafetyStatement}
                 </p>
-                <p className="text-sm mt-2 text-theme-400 mb-4">
+                <p className="text-sm mt-2 text-white mb-4">
                   Try these actions
                 </p>
                 {suggestedPrompts.map((item, index) => (
                   <Badge
                     key={index}
-                    className="text-theme-300 bg-theme-800 hover:bg-theme-700 p-1 ps-4 pe-4 ms-2 mb-2 cursor-pointer"
+                    className="text-theme-200 bg-theme-800 hover:bg-theme-700 p-1 ps-4 pe-4 ms-2 mb-2 cursor-pointer"
                     onClick={(): void => {
                       setPrompt(item)
                       invokeChatAPI(item)

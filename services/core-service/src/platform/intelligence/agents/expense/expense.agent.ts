@@ -1,15 +1,25 @@
-import { ExpenseCategory } from "@/shared/constants/types"
 import { tool } from "langchain"
 import { Injectable } from "@nestjs/common"
+import { z } from "zod"
 import {
   CreateExpenseSchema,
   GetExpenseByMonthSchema,
-} from "./agent-schemas/expenseagent.schema"
-import { ExpenseService } from "../../../resources/expense/expense.service"
+} from "./expenseagent.schema"
+import { ExpenseService } from "../../../../resources/expense/expense.service"
+import { ExpenseCategory } from "@/shared/constants/types"
 
 @Injectable()
 export class ExpenseAgent {
   constructor(private readonly service: ExpenseService) {}
+
+  public getExpenseCategoriesTool = tool(
+    async () => Object.values(ExpenseCategory),
+    {
+      name: "get_expense_categories",
+      description: "Get expense categories",
+      schema: z.object({}),
+    }
+  )
 
   public getExpenseByMonthTool = tool(
     async (input) => {
