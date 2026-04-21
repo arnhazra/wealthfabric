@@ -166,31 +166,19 @@ export class AssetService {
       const unitValuationAssets = [AssetType.EQUITY, AssetType.CRYPTO]
 
       if (simpleValuationAssets.includes(asset.assetType)) {
-        return calculateSimpleValuation(asset.currentValuation)
+        return calculateSimpleValuation(asset)
       }
 
       if (complexValuationAssets.includes(asset.assetType)) {
-        ;``
-        return calculateComplexValuation({
-          amountInvested: asset.amountInvested,
-          startDate: asset.startDate,
-          maturityDate: asset.maturityDate,
-          expectedReturnRate: asset.expectedReturnRate,
-        })
+        return calculateComplexValuation(asset)
       }
 
       if (recurringValuationAssets.includes(asset.assetType)) {
-        return calculateRecurringValuation({
-          contributionAmount: asset.contributionAmount,
-          contributionFrequency: asset.contributionFrequency,
-          expectedReturnRate: asset.expectedReturnRate,
-          maturityDate: asset.maturityDate,
-          startDate: asset.startDate,
-        })
+        return calculateRecurringValuation(asset)
       }
 
       if (unitValuationAssets.includes(asset.assetType)) {
-        return calculateUnitValuation(asset.units, asset.unitPurchasePrice)
+        return calculateUnitValuation(asset)
       }
 
       return 0
