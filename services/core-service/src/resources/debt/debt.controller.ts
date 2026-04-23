@@ -23,12 +23,12 @@ export class DebtController {
   @UseGuards(AuthGuard)
   @Post()
   async createDebt(
-    @Body() createDebtDto: CreateDebtRequestDto,
+    @Body() dto: CreateDebtRequestDto,
     @Request() request: ModRequest
   ) {
     try {
       const { userId } = request.user
-      return await this.service.createDebt({ userId, ...createDebtDto })
+      return await this.service.createDebt({ userId, ...dto })
     } catch (error) {
       throw new BadRequestException(statusMessages.connectionError)
     }

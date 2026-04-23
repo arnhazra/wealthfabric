@@ -29,9 +29,9 @@ export class DebtService {
     description: "Create a new debt for a user",
     schema: CreateDebtInputSchema,
   })
-  async createDebt(createDebtDto: z.output<typeof CreateDebtInputSchema>) {
+  async createDebt(dto: z.output<typeof CreateDebtInputSchema>) {
     try {
-      const { userId, ...rest } = createDebtDto
+      const { userId, ...rest } = dto
       return await this.commandBus.execute<CreateDebtCommand, Debt>(
         new CreateDebtCommand(userId, { ...rest })
       )
@@ -45,9 +45,9 @@ export class DebtService {
     description: "List down all the debts for a user",
     schema: GetDebtListInputSchema,
   })
-  async findMyDebts(getDebtListDto: z.output<typeof GetDebtListInputSchema>) {
+  async findMyDebts(dto: z.output<typeof GetDebtListInputSchema>) {
     try {
-      const { userId, searchKeyword } = getDebtListDto
+      const { userId, searchKeyword } = dto
       const debts = await this.queryBus.execute<FindDebtsByUserQuery, Debt[]>(
         new FindDebtsByUserQuery(userId, searchKeyword)
       )
@@ -110,11 +110,9 @@ export class DebtService {
     description: "Get total debt for a user",
     schema: GetTotalDebtInputSchema,
   })
-  async calculateTotalDebt(
-    calculateTotalDebtDto: z.output<typeof GetTotalDebtInputSchema>
-  ) {
+  async calculateTotalDebt(dto: z.output<typeof GetTotalDebtInputSchema>) {
     try {
-      const { userId } = calculateTotalDebtDto
+      const { userId } = dto
       const debts = await this.findMyDebts({ userId })
 
       const remainingDebt = debts.reduce(
