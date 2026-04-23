@@ -21,14 +21,13 @@ export class WidgetService {
 
   async getWidgets(userId: string) {
     try {
+      const user = await this.authService.findUserById(userId)
       const assetData = await this.assetService.calculateTotalAssetValuation({
         userId,
       })
       const debtData = await this.debtService.calculateTotalDebt({ userId })
       const goalData = await this.goalService.findNearestGoal({ userId })
-      const expenseData = await this.expenseService.findMyExpenses(userId)
-
-      const user = await this.authService.findUserById(userId)
+      const expenseData = await this.expenseService.findMyExpenses({ userId })
 
       const goalPercentage =
         ((assetData ?? 0) * 100) / (goalData ? goalData?.goalAmount : 0) || 0

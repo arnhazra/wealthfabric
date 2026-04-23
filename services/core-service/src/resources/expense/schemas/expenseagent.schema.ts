@@ -1,15 +1,6 @@
 import { ExpenseCategory } from "@/shared/constants/types"
 import { z } from "zod"
 
-export const GetExpenseByMonthSchema = z.object({
-  userId: z.string().describe("user id of the user"),
-  expenseMonth: z
-    .string()
-    .describe(
-      "calculate month given by the user - format should be like 2022-05"
-    ),
-})
-
 export const CreateExpenseSchema = z.object({
   userId: z.string().describe("user id of the user"),
   title: z
@@ -27,4 +18,22 @@ export const CreateExpenseSchema = z.object({
     .describe(
       `expense date; natural language allowed (e.g., "next Friday", "in 2 months", "2025-01-31") you need to convert to YYYY-MM-DD format string`
     ),
+})
+
+export const GetExpensesByUserSchema = z.object({
+  userId: z.string().describe("user id of the user"),
+  monthFilter: z
+    .string()
+    .optional()
+    .describe(
+      "optional - defaults to current month; calculate month given by the user - format should be like YYYY-MM"
+    ),
+  searchKeyword: z
+    .string()
+    .optional()
+    .describe("search keyword given by user - if any"),
+  expenseCategory: z
+    .enum(ExpenseCategory)
+    .optional()
+    .describe("expense category given by user - if any"),
 })

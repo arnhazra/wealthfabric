@@ -9,6 +9,12 @@ import { UpdateExpenseCommand } from "./commands/impl/update-expense.command"
 import { FindExpensesByUserQuery } from "./queries/impl/find-expense-by-user.query"
 import { FindExpenseByIdQuery } from "./queries/impl/find-expense-by-id.query"
 import { ExpenseCategory } from "@/shared/constants/types"
+import { z } from "zod"
+import { AgentTool } from "@/shared/agentdiscovery/agent.decorator"
+import {
+  CreateExpenseSchema,
+  GetExpensesByUserSchema,
+} from "./schemas/expenseagent.schema"
 
 @Injectable()
 export class ExpenseService {
@@ -17,23 +23,38 @@ export class ExpenseService {
     private readonly commandBus: CommandBus
   ) {}
 
-  async createExpense(userId: string, requestBody: CreateExpenseRequestDto) {
+  @AgentTool({
+    name: "get_expense_categories",
+    description: "Get expense categories",
+  })
+  public getExpenseCategories() {
+    return Object.values(ExpenseCategory)
+  }
+
+  @AgentTool({
+    name: "create_expense",
+    description: "Create a new expense for a user",
+    schema: CreateExpenseSchema,
+  })
+  async createExpense(dto: z.output<typeof CreateExpenseSchema>) {
     try {
+      const { userId, ...rest } = dto
       return await this.commandBus.execute<CreateExpenseCommand, Expense>(
-        new CreateExpenseCommand(userId, requestBody)
+        new CreateExpenseCommand(userId, { ...rest })
       )
     } catch (error) {
       throw new Error(statusMessages.connectionError)
     }
   }
 
-  async findMyExpenses(
-    userId: string,
-    monthFilter?: string,
-    searchKeyword?: string,
-    expenseCategory?: ExpenseCategory
-  ) {
+  @AgentTool({
+    name: "get_expenses_by_month",
+    description: "List down expenses for an user for any given month",
+    schema: GetExpensesByUserSchema,
+  })
+  async findMyExpenses(dto: z.output<typeof GetExpensesByUserSchema>) {
     try {
+      const { userId, monthFilter, expenseCategory, searchKeyword } = dto
       return await this.queryBus.execute<FindExpensesByUserQuery>(
         new FindExpensesByUserQuery(
           userId,

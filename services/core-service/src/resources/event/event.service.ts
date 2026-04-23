@@ -160,7 +160,7 @@ export class EventService {
         eventSource: "Cashflow",
       }))
 
-      const expenses = await this.expenseService.findMyExpenses(userId)
+      const expenses = await this.expenseService.findMyExpenses({ userId })
       const expensesEvents = expenses.expenses.map((expense: Expense) => {
         const expenseCategoryDisplayName =
           parsedExpenseCategories.expenseCategories.find(
