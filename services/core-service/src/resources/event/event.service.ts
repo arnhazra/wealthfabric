@@ -101,7 +101,7 @@ export class EventService {
         eventSource: "Goal",
       }))
 
-      const debts = await this.debtService.findMyDebts(userId)
+      const debts = await this.debtService.findMyDebts({ userId })
 
       const debtStartEvents = debts.map((debt) => ({
         eventDate: debt.startDate,
@@ -130,7 +130,7 @@ export class EventService {
         eventSource: "Debt",
       }))
 
-      const cashflows = await this.cashFlowService.findMyCashflows(userId)
+      const cashflows = await this.cashFlowService.findMyCashflows({ userId })
       const cashflowEvents = cashflows.map((cashflow) => ({
         eventDate: cashflow.nextExecutionAt,
         eventName: cashflow.description,

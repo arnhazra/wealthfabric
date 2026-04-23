@@ -17,8 +17,6 @@ import { GoalModule } from "@/resources/goal/goal.module"
 import { EventModule } from "@/resources/event/event.module"
 import { ExpenseModule } from "@/resources/expense/expense.module"
 import { AssetAgent } from "./agents/asset/asset.agent"
-import { DebtAgent } from "./agents/debt/debt.agent"
-import { CashflowAgent } from "./agents/cashflow/cashflow.agent"
 import { GoalAgent } from "./agents/goal/goal.agent"
 import { ExpenseAgent } from "./agents/expense/expense.agent"
 import { EventAgent } from "./agents/event/event.agent"
@@ -46,8 +44,6 @@ import { EventAgent } from "./agents/event/event.agent"
     CreateThreadCommandHandler,
     FetchThreadByIdQueryHandler,
     AssetAgent,
-    DebtAgent,
-    CashflowAgent,
     GoalAgent,
     ExpenseAgent,
     EventAgent,

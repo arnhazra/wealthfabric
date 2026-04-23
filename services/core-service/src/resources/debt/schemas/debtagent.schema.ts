@@ -1,17 +1,18 @@
 import { z } from "zod"
 
-export const GetByUserIdSchema = z.object({
+export const GetTotalDebtInputSchema = z.object({
   userId: z.string().describe("user id of the user"),
 })
 
-export const GetDebtListSchema = z.object({
+export const GetDebtListInputSchema = z.object({
   userId: z.string().describe("user id of the user"),
   searchKeyword: z
     .string()
+    .optional()
     .describe("debt name given by the user to search - this is optional"),
 })
 
-export const CreateDebtSchema = z.object({
+export const CreateDebtInputSchema = z.object({
   userId: z.string().describe("user id of the user"),
   debtPurpose: z.string().describe("debt purpose given by the user"),
   identifier: z.string().describe("identifier given by the user"),

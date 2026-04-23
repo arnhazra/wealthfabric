@@ -6,35 +6,53 @@ import { DeleteCashflowCommand } from "./commands/impl/delete-cashflow.command"
 import { CreateCashFlowCommand } from "./commands/impl/create-cashflow.command"
 import { FindCashflowsQuery } from "./queries/impl/find-cashflows.query"
 import { CreateCashFlowRequestDto } from "./dto/request/create-cashflow.request.dto"
-import { EventEmitter2 } from "@nestjs/event-emitter"
 import { Asset } from "../asset/schemas/asset.schema"
 import { FindCashflowsByUserQuery } from "./queries/impl/find-cashflows-by-user.query"
 import { computeNextDate } from "./helpers/compute-next-date"
 import { UpdateCashflowCommand } from "./commands/impl/update-cashflow.command"
 import { FindCashflowByIdQuery } from "./queries/impl/find-cashflow-by-id.query"
 import { AssetService } from "../asset/asset.service"
+import { AgentTool } from "@/shared/agentdiscovery/agent.decorator"
+import {
+  CreateCashflowSchema,
+  FindCashflowsSchema,
+} from "./schemas/cashflowagent.schema"
+import { z } from "zod"
 
 @Injectable()
 export class CashFlowService {
   constructor(
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,
-    private readonly eventEmitter: EventEmitter2,
     private readonly assetService: AssetService
   ) {}
 
-  async create(userId: string, requestBody: CreateCashFlowRequestDto) {
+  @AgentTool({
+    name: "create_cashflow",
+    description: "Create a cashflow",
+    schema: CreateCashflowSchema,
+  })
+  async create(createCashflowDto: z.output<typeof CreateCashflowSchema>) {
     try {
+      const { userId, ...rest } = createCashflowDto
       return await this.commandBus.execute<CreateCashFlowCommand, Cashflow>(
-        new CreateCashFlowCommand(userId, requestBody)
+        new CreateCashFlowCommand(userId, { ...rest })
       )
     } catch (error) {
       throw new Error(statusMessages.connectionError)
     }
   }
 
-  async findMyCashflows(userId: string, searchKeyword?: string) {
+  @AgentTool({
+    name: "get_cashflows_list",
+    description: "Get list of cashflows for a user",
+    schema: FindCashflowsSchema,
+  })
+  async findMyCashflows(
+    findMyCashflowsDto: z.output<typeof FindCashflowsSchema>
+  ) {
     try {
+      const { userId, searchKeyword } = findMyCashflowsDto
       return await this.queryBus.execute<FindCashflowsByUserQuery, Cashflow[]>(
         new FindCashflowsByUserQuery(userId, searchKeyword)
       )

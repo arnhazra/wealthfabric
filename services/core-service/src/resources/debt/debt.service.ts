@@ -9,6 +9,13 @@ import { UpdateDebtCommand } from "./commands/impl/update-debt.command"
 import { FindDebtsByUserQuery } from "./queries/impl/find-debt-by-user.query"
 import { FindDebtByIdQuery } from "./queries/impl/find-debt-by-id.query"
 import { calculateDebtDetails } from "./helpers/calculate-debt"
+import { AgentTool } from "@/shared/agentdiscovery/agent.decorator"
+import {
+  CreateDebtInputSchema,
+  GetTotalDebtInputSchema,
+  GetDebtListInputSchema,
+} from "./schemas/debtagent.schema"
+import { z } from "zod"
 
 @Injectable()
 export class DebtService {
@@ -17,18 +24,30 @@ export class DebtService {
     private readonly commandBus: CommandBus
   ) {}
 
-  async createDebt(userId: string, requestBody: CreateDebtRequestDto) {
+  @AgentTool({
+    name: "create_debt",
+    description: "Create a new debt for a user",
+    schema: CreateDebtInputSchema,
+  })
+  async createDebt(createDebtDto: z.output<typeof CreateDebtInputSchema>) {
     try {
+      const { userId, ...rest } = createDebtDto
       return await this.commandBus.execute<CreateDebtCommand, Debt>(
-        new CreateDebtCommand(userId, requestBody)
+        new CreateDebtCommand(userId, { ...rest })
       )
     } catch (error) {
       throw new Error(statusMessages.connectionError)
     }
   }
 
-  async findMyDebts(userId: string, searchKeyword?: string) {
+  @AgentTool({
+    name: "get_debt_list",
+    description: "List down all the debts for a user",
+    schema: GetDebtListInputSchema,
+  })
+  async findMyDebts(getDebtListDto: z.output<typeof GetDebtListInputSchema>) {
     try {
+      const { userId, searchKeyword } = getDebtListDto
       const debts = await this.queryBus.execute<FindDebtsByUserQuery, Debt[]>(
         new FindDebtsByUserQuery(userId, searchKeyword)
       )
@@ -86,9 +105,17 @@ export class DebtService {
     }
   }
 
-  async calculateTotalDebt(reqUserId: string) {
+  @AgentTool({
+    name: "get_total_debt_by_userid",
+    description: "Get total debt for a user",
+    schema: GetTotalDebtInputSchema,
+  })
+  async calculateTotalDebt(
+    calculateTotalDebtDto: z.output<typeof GetTotalDebtInputSchema>
+  ) {
     try {
-      const debts = await this.findMyDebts(reqUserId)
+      const { userId } = calculateTotalDebtDto
+      const debts = await this.findMyDebts({ userId })
 
       const remainingDebt = debts.reduce(
         (sum, val) => sum + val.remainingTotal,
