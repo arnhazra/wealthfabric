@@ -32,9 +32,9 @@ export class CashFlowService {
     description: "Create a cashflow",
     schema: CreateCashflowSchema,
   })
-  async create(createCashflowDto: z.output<typeof CreateCashflowSchema>) {
+  async create(dto: z.output<typeof CreateCashflowSchema>) {
     try {
-      const { userId, ...rest } = createCashflowDto
+      const { userId, ...rest } = dto
       return await this.commandBus.execute<CreateCashFlowCommand, Cashflow>(
         new CreateCashFlowCommand(userId, { ...rest })
       )
@@ -48,11 +48,9 @@ export class CashFlowService {
     description: "Get list of cashflows for a user",
     schema: FindCashflowsSchema,
   })
-  async findMyCashflows(
-    findMyCashflowsDto: z.output<typeof FindCashflowsSchema>
-  ) {
+  async findMyCashflows(dto: z.output<typeof FindCashflowsSchema>) {
     try {
-      const { userId, searchKeyword } = findMyCashflowsDto
+      const { userId, searchKeyword } = dto
       return await this.queryBus.execute<FindCashflowsByUserQuery, Cashflow[]>(
         new FindCashflowsByUserQuery(userId, searchKeyword)
       )

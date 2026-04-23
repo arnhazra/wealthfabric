@@ -44,9 +44,9 @@ export class EventService {
     description: "Create a new event for a user",
     schema: CreateEventSchema,
   })
-  async createEvent(createEventDto: z.output<typeof CreateEventSchema>) {
+  async createEvent(dto: z.output<typeof CreateEventSchema>) {
     try {
-      const { userId, ...rest } = createEventDto
+      const { userId, ...rest } = dto
       return await this.commandBus.execute<CreateEventCommand, Event>(
         new CreateEventCommand(userId, { ...rest })
       )
@@ -60,11 +60,9 @@ export class EventService {
     description: "List down events for an user for any given month",
     schema: GetEventByMonthSchema,
   })
-  async findMyEventsByMonth(
-    getEventByMonthDto: z.output<typeof GetEventByMonthSchema>
-  ) {
+  async findMyEventsByMonth(dto: z.output<typeof GetEventByMonthSchema>) {
     try {
-      const { userId, eventMonth } = getEventByMonthDto
+      const { userId, eventMonth } = dto
       const events = await this.queryBus.execute<
         FindEventsByUserQuery,
         Event[]

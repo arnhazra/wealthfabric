@@ -23,14 +23,14 @@ export class CashFlowController {
   @UseGuards(AuthGuard)
   @Post()
   async create(
-    @Body() createCashflowDto: CreateCashFlowRequestDto,
+    @Body() dto: CreateCashFlowRequestDto,
     @Request() request: ModRequest
   ) {
     try {
       const { userId } = request.user
       return await this.service.create({
         userId,
-        ...createCashflowDto,
+        ...dto,
       })
     } catch (error) {
       throw new BadRequestException(
