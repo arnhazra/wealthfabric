@@ -6,11 +6,13 @@ import { AuthModule } from "./auth/auth.module"
 import { ResourceModule } from "./resources/resources.module"
 import { SharedModule } from "./shared/shared.module"
 import { LLMModule } from "./shared/llm/llm.module"
+import { AgentDiscoveryModule } from "./shared/agentdiscovery/agent.module"
 
 @Module({
   imports: [
     EventEmitterModule.forRoot(),
     LLMModule.forRoot(),
+    AgentDiscoveryModule.forRoot(),
     AuthModule,
     PlatformModule,
     ResourceModule,

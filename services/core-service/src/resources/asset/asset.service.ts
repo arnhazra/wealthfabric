@@ -31,6 +31,10 @@ export class AssetService {
     private readonly commandBus: CommandBus
   ) {}
 
+  getAssetTypes() {
+    return Object.values(AssetType)
+  }
+
   async createAsset(userId: string, requestBody: CreateAssetRequestDto) {
     try {
       return await this.commandBus.execute<CreateAssetCommand, Asset>(

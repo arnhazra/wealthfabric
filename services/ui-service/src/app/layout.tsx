@@ -10,7 +10,7 @@ export const quickSand = Quicksand({ subsets: ["latin"], weight: ["600"] })
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <head>
         <title>{PLATFORM_NAME}</title>
         <meta

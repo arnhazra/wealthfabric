@@ -8,14 +8,9 @@ import { createAgent, SystemMessage, HumanMessage, AIMessage } from "langchain"
 import { config } from "@/config"
 import { Thread } from "./schemas/thread.schema"
 import { User } from "@/auth/schemas/user.schema"
-import { DebtAgent } from "@/platform/intelligence/agents/debt/debt.agent"
-import { GoalAgent } from "@/platform/intelligence/agents/goal/goal.agent"
-import { AssetAgent } from "@/platform/intelligence/agents/asset/asset.agent"
-import { ExpenseAgent } from "@/platform/intelligence/agents/expense/expense.agent"
 import { LLMService } from "@/shared/llm/llm.service"
-import { CashflowAgent } from "@/platform/intelligence/agents/cashflow/cashflow.agent"
 import { ConfigService } from "@/platform/config/config.service"
-import { EventAgent } from "@/platform/intelligence/agents/event/event.agent"
+import { AgentRegistryService } from "@/shared/agentdiscovery/agent.service"
 
 type AgentLanguageModelLike = RunnableInterface<
   BaseLanguageModelInput,
@@ -31,14 +26,9 @@ export interface ChatArgs {
 @Injectable()
 export class IntelligenceOrchestrator {
   constructor(
-    private readonly assetAgent: AssetAgent,
-    private readonly goalAgent: GoalAgent,
-    private readonly debtAgent: DebtAgent,
-    private readonly expenseAgent: ExpenseAgent,
-    private readonly cashflowAgent: CashflowAgent,
-    private readonly eventAgent: EventAgent,
     private readonly configService: ConfigService,
-    private readonly llmService: LLMService
+    private readonly llmService: LLMService,
+    private readonly agentRegistry: AgentRegistryService
   ) {}
 
   private async getChatSystemInstruction(user: User) {
@@ -57,25 +47,7 @@ export class IntelligenceOrchestrator {
   private createChatAgent(llm: AgentLanguageModelLike) {
     return createAgent({
       model: llm,
-      tools: [
-        this.assetAgent.createAssetGroupTool,
-        this.assetAgent.getAssetGroupListTool,
-        this.assetAgent.getAssetGroupValuationTool,
-        this.assetAgent.getAssetTypesTool,
-        this.assetAgent.getTotalAssetTool,
-        this.assetAgent.getAssetListTool,
-        this.goalAgent.createGoalTool,
-        this.goalAgent.getGoalListTool,
-        this.goalAgent.getNearestGoalTool,
-        this.debtAgent.createDebtTool,
-        this.debtAgent.getTotalDebtTool,
-        this.debtAgent.getDebtListTool,
-        this.expenseAgent.getExpenseByMonthTool,
-        this.expenseAgent.createExpenseTool,
-        this.cashflowAgent.getCashflowsByUserIdTool,
-        this.eventAgent.createEventTool,
-        this.eventAgent.getEventByMonthTool,
-      ],
+      tools: this.agentRegistry.getTools(),
       stateSchema: undefined,
     })
   }
