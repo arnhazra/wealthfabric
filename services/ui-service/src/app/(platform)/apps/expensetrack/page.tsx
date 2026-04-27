@@ -59,7 +59,7 @@ export default function Page() {
   const expenses = useQuery<ExpenseResponse>({
     queryKey: ["get-expenses", searchKeyword, selectedMonth, category],
     queryUrl: buildQueryUrl(endPoints.expense, {
-      month: selectedMonth,
+      monthFilter: selectedMonth,
       searchKeyword,
       category: category === "all" ? "" : category,
     }),
@@ -70,7 +70,7 @@ export default function Page() {
   const totalExpense = useQuery<ExpenseResponse>({
     queryKey: ["get-total-expense", selectedMonth],
     queryUrl: buildQueryUrl(endPoints.expense, {
-      month: selectedMonth,
+      monthFilter: selectedMonth,
       category: "",
     }),
     method: HTTPMethods.GET,
@@ -120,7 +120,7 @@ export default function Page() {
 
               {formatDate(expense.expenseDate, true, false)}
             </div>
-            <Badge className="bg-theme-700 border-border text-white text-xs">
+            <Badge className="bg-border border-border text-white text-xs">
               <ExpenseCategoryIcon />
               {expenseCategory?.displayName}
             </Badge>
@@ -180,7 +180,7 @@ export default function Page() {
               variant="ghost"
               size="icon"
               onClick={prevMonth}
-              className="h-8 w-8 text-theme-400 hover:bg-theme-800 hover:text-theme-100"
+              className="h-8 w-8 text-theme-200 hover:bg-theme-800 hover:text-theme-100"
             >
               <Icons.ChevronLeft className="h-4 w-4" />
             </Button>
@@ -191,7 +191,7 @@ export default function Page() {
               variant="ghost"
               size="icon"
               onClick={nextMonth}
-              className="h-8 w-8 text-theme-400 hover:bg-theme-800 hover:text-theme-100"
+              className="h-8 w-8 text-theme-200 hover:bg-theme-800 hover:text-theme-100"
             >
               <Icons.ChevronRight className="h-4 w-4" />
             </Button>

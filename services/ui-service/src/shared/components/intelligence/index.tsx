@@ -142,7 +142,7 @@ export default function Intelligence() {
             <Show condition={messages.length === 0}>
               <div className="text-center mt-8">
                 <div className="flex justify-center mb-4">
-                  <IconContainer ai>
+                  <IconContainer>
                     <Sparkle className="h-4 w-4" />
                   </IconContainer>
                 </div>
@@ -156,7 +156,7 @@ export default function Intelligence() {
                 {suggestedPrompts.map((item, index) => (
                   <Badge
                     key={index}
-                    className="text-theme-200 bg-theme-800 hover:bg-theme-700 p-1 ps-4 pe-4 ms-2 mb-2 cursor-pointer"
+                    className="text-theme-200 bg-theme-800 hover:bg-border p-1 ps-4 pe-4 ms-2 mb-2 cursor-pointer"
                     onClick={(): void => {
                       setPrompt(item)
                       invokeChatAPI(item)
@@ -231,7 +231,7 @@ export default function Intelligence() {
             }}
           >
             <div className="w-full max-w-4xl mx-auto">
-              <div className="relative bg-theme-900 border border-border rounded-full p-2 ps-4 pe-4 shadow-lg">
+              <div className="relative bg-main border border-border rounded-full p-2 ps-4 pe-4 shadow-lg">
                 <div className="flex flex-col gap-3">
                   <div className="flex items-center gap-3">
                     <div className="flex-1">
@@ -241,14 +241,14 @@ export default function Intelligence() {
                         onChange={(e) => setPrompt(e.target.value)}
                         placeholder="Ask Anything"
                         disabled={isLoading}
-                        className="bg-transparent border-none text-theme-300 placeholder:text-theme-500 focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none outline-none ring-0 text-sm px-0"
+                        className="bg-transparent border-none text-theme-200 placeholder:text-theme-500 focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none outline-none ring-0 text-sm px-0"
                       />
                     </div>
                     <Button
                       type="submit"
                       disabled={isLoading || !prompt.trim()}
                       size="icon"
-                      className="bg-theme-700 hover:bg-theme-600 text-white h-8 w-8 rounded-2xl"
+                      className="bg-border hover:bg-theme-600 text-white h-8 w-8 rounded-2xl"
                     >
                       <ArrowUp className="h-4 w-4" />
                     </Button>

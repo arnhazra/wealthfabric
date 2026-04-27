@@ -122,7 +122,7 @@ export default function Page() {
           actionComponents={[
             <Button
               onClick={editName}
-              className="p-2 bg-primary hover:bg-primary text-black"
+              className="p-2 bg-primary hover:bg-primary"
               variant="default"
               size="icon"
             >
@@ -154,7 +154,7 @@ export default function Page() {
         />
         <SectionPanel
           icon={
-            <IconContainer ai>
+            <IconContainer>
               <Sparkle className="h-4 w-4" />
             </IconContainer>
           }

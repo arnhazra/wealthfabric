@@ -3,16 +3,11 @@ import { ReactNode } from "react"
 
 interface IconContainerProps {
   children: ReactNode
-  ai?: boolean
 }
 
-const IconContainer = ({ ai, children }: IconContainerProps) => {
+const IconContainer = ({ children }: IconContainerProps) => {
   return (
-    <div
-      className={`p-2 bg-primary rounded-full ${ai ? "ui-soft-gradient text-white" : "text-black"}`}
-    >
-      {children}
-    </div>
+    <div className="p-2 bg-primary rounded-full text-white">{children}</div>
   )
 }
 
